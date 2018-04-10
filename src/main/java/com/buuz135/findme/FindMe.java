@@ -12,13 +12,14 @@ import net.minecraftforge.fml.common.network.simpleimpl.SimpleNetworkWrapper;
 @Mod(
         modid = FindMe.MOD_ID,
         name = FindMe.MOD_NAME,
-        version = FindMe.VERSION
+        version = FindMe.VERSION,
+        dependencies = "required:jei"
 )
 public class FindMe {
 
     public static final String MOD_ID = "findme";
     public static final String MOD_NAME = "FindMe";
-    public static final String VERSION = "1.0-SNAPSHOT";
+    public static final String VERSION = "1.0";
 
     public static final SimpleNetworkWrapper NETWORK = NetworkRegistry.INSTANCE.newSimpleChannel(MOD_ID);
 
