@@ -1,6 +1,7 @@
 package com.buuz135.findme.network;
 
 import com.buuz135.findme.FindMe;
+import com.buuz135.findme.proxy.FindMeConfig;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.PacketBuffer;
@@ -62,7 +63,7 @@ public class PositionRequestMessage implements IMessage {
         @Override
         public PositionResponseMessage onMessage(PositionRequestMessage message, MessageContext ctx) {
             ctx.getServerHandler().player.world.getMinecraftServer().addScheduledTask(() -> {
-                AxisAlignedBB box = new AxisAlignedBB(ctx.getServerHandler().player.getPosition()).grow(8);
+                AxisAlignedBB box = new AxisAlignedBB(ctx.getServerHandler().player.getPosition()).grow(FindMeConfig.RADIUS_RANGE);
                 List<BlockPos> blockPosList = new ArrayList<>();
                 for (BlockPos blockPos : getBlockPosInAABB(box)) {
                     TileEntity tileEntity = ctx.getServerHandler().player.world.getTileEntity(blockPos);
