@@ -55,7 +55,6 @@ public class PositionResponseMessage implements IMessage {
                 for (BlockPos position : message.positions) {
                     for (int i = 0; i < 2; ++i)
                         Minecraft.getMinecraft().effectRenderer.addEffect(new ParticlePosition(Minecraft.getMinecraft().player.world, position.getX() + 0.75 - Minecraft.getMinecraft().player.world.rand.nextDouble() / 2D, position.getY() + 0.75 - Minecraft.getMinecraft().player.world.rand.nextDouble() / 2D, position.getZ() + 0.75 - Minecraft.getMinecraft().player.world.rand.nextDouble() / 2D));
-
                 }
             });
             return null;

@@ -3,6 +3,7 @@ package com.buuz135.findme.network;
 import com.buuz135.findme.FindMe;
 import com.buuz135.findme.proxy.FindMeConfig;
 import io.netty.buffer.ByteBuf;
+import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.tileentity.TileEntity;
@@ -67,14 +68,27 @@ public class PositionRequestMessage implements IMessage {
                 List<BlockPos> blockPosList = new ArrayList<>();
                 for (BlockPos blockPos : getBlockPosInAABB(box)) {
                     TileEntity tileEntity = ctx.getServerHandler().player.world.getTileEntity(blockPos);
-                    if (tileEntity != null && tileEntity.hasCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, null)) {
-                        IItemHandler handler = tileEntity.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, null);
-                        for (int i = 0; i < handler.getSlots(); i++) {
-                            if (!handler.getStackInSlot(i).isEmpty() && handler.getStackInSlot(i).isItemEqual(message.stack)) {
-                                blockPosList.add(blockPos);
-                                break;
+                    if (tileEntity != null) {
+                        if (tileEntity.hasCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, null)) {
+                            IItemHandler handler = tileEntity.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, null);
+                            for (int i = 0; i < handler.getSlots(); i++) {
+                                if (!handler.getStackInSlot(i).isEmpty() && handler.getStackInSlot(i).isItemEqual(message.stack)) {
+                                    blockPosList.add(blockPos);
+                                    break;
+                                }
                             }
                         }
+                        if (tileEntity instanceof IInventory) {
+                            IInventory inventory = (IInventory) tileEntity;
+                            if (inventory.isEmpty()) continue;
+                            for (int i = 0; i < inventory.getSizeInventory(); i++) {
+                                if (!inventory.getStackInSlot(i).isEmpty() && inventory.getStackInSlot(i).isItemEqual(message.stack)) {
+                                    blockPosList.add(blockPos);
+                                    break;
+                                }
+                            }
+                        }
+
                     }
                 }
                 if (!blockPosList.isEmpty())
