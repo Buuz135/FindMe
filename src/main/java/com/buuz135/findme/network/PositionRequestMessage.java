@@ -71,10 +71,12 @@ public class PositionRequestMessage implements IMessage {
                     if (tileEntity != null) {
                         if (tileEntity.hasCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, null)) {
                             IItemHandler handler = tileEntity.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, null);
-                            for (int i = 0; i < handler.getSlots(); i++) {
-                                if (!handler.getStackInSlot(i).isEmpty() && handler.getStackInSlot(i).isItemEqual(message.stack)) {
-                                    blockPosList.add(blockPos);
-                                    break;
+                            if (handler != null) {
+                                for (int i = 0; i < handler.getSlots(); i++) {
+                                    if (!handler.getStackInSlot(i).isEmpty() && handler.getStackInSlot(i).isItemEqual(message.stack)) {
+                                        blockPosList.add(blockPos);
+                                        break;
+                                    }
                                 }
                             }
                         }
