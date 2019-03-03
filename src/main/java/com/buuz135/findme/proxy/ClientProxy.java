@@ -10,10 +10,12 @@ import net.minecraft.client.settings.KeyBinding;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.client.event.GuiScreenEvent;
+import net.minecraftforge.client.event.RenderTooltipEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.common.gameevent.TickEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import org.lwjgl.input.Keyboard;
@@ -21,6 +23,7 @@ import org.lwjgl.input.Keyboard;
 public class ClientProxy extends CommonProxy {
 
     public static KeyBinding KEY = new KeyBinding("key.findme.search", Keyboard.KEY_Y, "key.findme.category");
+    private ItemStack stack = ItemStack.EMPTY;
 
     @Override
     public void preinit(FMLPreInitializationEvent event) {
@@ -31,9 +34,26 @@ public class ClientProxy extends CommonProxy {
 
     @SideOnly(Side.CLIENT)
     @SubscribeEvent
+    public void onTooltip(RenderTooltipEvent.Pre event) {
+        stack = event.getStack();
+    }
+
+    @SideOnly(Side.CLIENT)
+    @SubscribeEvent
+    public void onRender(TickEvent.RenderTickEvent event) {
+        if (event.phase == TickEvent.Phase.START) {
+            stack = ItemStack.EMPTY;
+        }
+    }
+
+    @SideOnly(Side.CLIENT)
+    @SubscribeEvent
     public void keyPress(GuiScreenEvent.KeyboardInputEvent.Post event) {
         if (Keyboard.getEventKeyState() && KEY.isActiveAndMatches(Keyboard.getEventKey()) && Minecraft.getMinecraft().currentScreen != null) {
             GuiScreen screen = Minecraft.getMinecraft().currentScreen;
+            if (!stack.isEmpty()) {
+                FindMe.NETWORK.sendToServer(new PositionRequestMessage(stack));
+            }
             if (screen instanceof GuiContainer) {
                 Object o = JEIPlugin.runtime.getIngredientListOverlay().getIngredientUnderMouse();
                 if (o != null) {
@@ -52,4 +72,5 @@ public class ClientProxy extends CommonProxy {
             }
         }
     }
+
 }
