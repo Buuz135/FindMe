@@ -14,6 +14,9 @@ public class FindMeConfig {
     @Config.RangeInt(min = 0)
     public static int RADIUS_RANGE = 8;
 
+    @Config.Comment("Whether ignore item damage on search or not")
+    public static boolean IGNORE_ITEM_DAMAGE = false;
+
     @Mod.EventBusSubscriber(modid = FindMe.MOD_ID)
     private static class EventHandler {
         @SubscribeEvent
