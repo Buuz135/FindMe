@@ -5,16 +5,14 @@ import io.netty.buffer.ByteBuf;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.math.BlockPos;
-import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
-import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
-import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.fml.network.NetworkEvent;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Supplier;
 
-public class PositionResponseMessage implements IMessage {
+public class PositionResponseMessage implements Serializable {
 
     private List<BlockPos> positions;
 
@@ -25,8 +23,7 @@ public class PositionResponseMessage implements IMessage {
     public PositionResponseMessage() {
     }
 
-    @Override
-    public void fromBytes(ByteBuf buf) {
+    public PositionResponseMessage fromBytes(ByteBuf buf) {
         PacketBuffer packetBuffer = new PacketBuffer(buf);
         int amount = packetBuffer.readInt();
         positions = new ArrayList<>();
@@ -34,9 +31,9 @@ public class PositionResponseMessage implements IMessage {
             positions.add(packetBuffer.readBlockPos());
             --amount;
         }
+        return this;
     }
 
-    @Override
     public void toBytes(ByteBuf buf) {
         PacketBuffer packetBuffer = new PacketBuffer(buf);
         packetBuffer.writeInt(positions.size());
@@ -45,19 +42,16 @@ public class PositionResponseMessage implements IMessage {
         }
     }
 
-    public static class Handler implements IMessageHandler<PositionResponseMessage, IMessage> {
-
-        @SideOnly(Side.CLIENT)
-        @Override
-        public IMessage onMessage(PositionResponseMessage message, MessageContext ctx) {
-            Minecraft.getMinecraft().addScheduledTask(() -> {
-                Minecraft.getMinecraft().player.closeScreen();
-                for (BlockPos position : message.positions) {
+    public void handle(Supplier<NetworkEvent.Context> context) {
+        Minecraft.getInstance().deferTask(() -> {
+            if (positions.size() > 0) {
+                Minecraft.getInstance().player.closeScreen();
+                for (BlockPos position : positions) {
                     for (int i = 0; i < 2; ++i)
-                        Minecraft.getMinecraft().effectRenderer.addEffect(new ParticlePosition(Minecraft.getMinecraft().player.world, position.getX() + 0.75 - Minecraft.getMinecraft().player.world.rand.nextDouble() / 2D, position.getY() + 0.75 - Minecraft.getMinecraft().player.world.rand.nextDouble() / 2D, position.getZ() + 0.75 - Minecraft.getMinecraft().player.world.rand.nextDouble() / 2D));
+                        Minecraft.getInstance().particles.addEffect(new ParticlePosition(Minecraft.getInstance().player.world, position.getX() + 0.75 - Minecraft.getInstance().player.world.rand.nextDouble() / 2D, position.getY() + 0.75 - Minecraft.getInstance().player.world.rand.nextDouble() / 2D, position.getZ() + 0.75 - Minecraft.getInstance().player.world.rand.nextDouble() / 2D, 0, 0, 0));
                 }
-            });
-            return null;
-        }
+            }
+        });
     }
+
 }
