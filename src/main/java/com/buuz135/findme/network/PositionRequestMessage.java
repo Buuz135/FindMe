@@ -9,17 +9,15 @@ import net.minecraft.network.PacketBuffer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
-import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
-import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
-import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
+import net.minecraftforge.fml.network.NetworkDirection;
+import net.minecraftforge.fml.network.NetworkEvent;
 import net.minecraftforge.items.CapabilityItemHandler;
-import net.minecraftforge.items.IItemHandler;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Supplier;
 
-public class PositionRequestMessage implements IMessage {
+public class PositionRequestMessage {
 
     private ItemStack stack;
 
@@ -42,61 +40,50 @@ public class PositionRequestMessage implements IMessage {
         return blocks;
     }
 
-    @Override
-    public void fromBytes(ByteBuf buf) {
+    public PositionRequestMessage fromBytes(ByteBuf buf) {
         PacketBuffer packetBuffer = new PacketBuffer(buf);
         stack = ItemStack.EMPTY;
-        try {
-            stack = packetBuffer.readItemStack();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        stack = packetBuffer.readItemStack();
+        return this;
     }
 
-    @Override
     public void toBytes(ByteBuf buf) {
         PacketBuffer packetBuffer = new PacketBuffer(buf);
         packetBuffer.writeItemStack(stack);
     }
 
-    public static class Handler implements IMessageHandler<PositionRequestMessage, PositionResponseMessage> {
-
-        @Override
-        public PositionResponseMessage onMessage(PositionRequestMessage message, MessageContext ctx) {
-            ctx.getServerHandler().player.world.getMinecraftServer().addScheduledTask(() -> {
-                AxisAlignedBB box = new AxisAlignedBB(ctx.getServerHandler().player.getPosition()).grow(FindMeConfig.RADIUS_RANGE);
-                List<BlockPos> blockPosList = new ArrayList<>();
-                for (BlockPos blockPos : getBlockPosInAABB(box)) {
-                    TileEntity tileEntity = ctx.getServerHandler().player.world.getTileEntity(blockPos);
-                    if (tileEntity != null) {
-                        if (tileEntity.hasCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, null)) {
-                            IItemHandler handler = tileEntity.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, null);
-                            if (handler != null) {
-                                for (int i = 0; i < handler.getSlots(); i++) {
-                                    if (!handler.getStackInSlot(i).isEmpty() && handler.getStackInSlot(i).isItemEqual(message.stack)) {
-                                        blockPosList.add(blockPos);
-                                        break;
-                                    }
-                                }
+    public void handle(Supplier<NetworkEvent.Context> contextSupplier) {
+        contextSupplier.get().enqueueWork(() -> {
+            AxisAlignedBB box = new AxisAlignedBB(contextSupplier.get().getSender().getPosition()).grow(FindMeConfig.COMMON.RADIUS_RANGE.get());
+            List<BlockPos> blockPosList = new ArrayList<>();
+            for (BlockPos blockPos : getBlockPosInAABB(box)) {
+                TileEntity tileEntity = contextSupplier.get().getSender().world.getTileEntity(blockPos);
+                if (tileEntity != null) {
+                    tileEntity.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, null).ifPresent(handler -> {
+                        for (int i = 0; i < handler.getSlots(); i++) {
+                            if (!handler.getStackInSlot(i).isEmpty() && handler.getStackInSlot(i).isItemEqual(stack)) {
+                                blockPosList.add(blockPos);
+                                break;
                             }
                         }
-                        if (tileEntity instanceof IInventory) {
-                            IInventory inventory = (IInventory) tileEntity;
-                            if (inventory.isEmpty()) continue;
-                            for (int i = 0; i < inventory.getSizeInventory(); i++) {
-                                if (!inventory.getStackInSlot(i).isEmpty() && inventory.getStackInSlot(i).isItemEqual(message.stack)) {
-                                    blockPosList.add(blockPos);
-                                    break;
-                                }
+                    });
+                    if (tileEntity instanceof IInventory) {
+                        IInventory inventory = (IInventory) tileEntity;
+                        if (inventory.isEmpty()) continue;
+                        for (int i = 0; i < inventory.getSizeInventory(); i++) {
+                            if (!inventory.getStackInSlot(i).isEmpty() && inventory.getStackInSlot(i).isItemEqual(stack)) {
+                                blockPosList.add(blockPos);
+                                break;
                             }
                         }
-
                     }
+
                 }
-                if (!blockPosList.isEmpty())
-                    FindMe.NETWORK.sendTo(new PositionResponseMessage(blockPosList), ctx.getServerHandler().player);
-            });
-            return null;
-        }
+            }
+            if (!blockPosList.isEmpty())
+                FindMe.NETWORK.sendTo(new PositionResponseMessage(blockPosList), contextSupplier.get().getSender().connection.netManager, NetworkDirection.PLAY_TO_CLIENT);
+
+        });
     }
+
 }
