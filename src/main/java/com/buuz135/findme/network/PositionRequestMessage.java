@@ -61,7 +61,7 @@ public class PositionRequestMessage {
                 if (tileEntity != null) {
                     tileEntity.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, null).ifPresent(handler -> {
                         for (int i = 0; i < handler.getSlots(); i++) {
-                            if (!handler.getStackInSlot(i).isEmpty() && compareItems(stack, handler.getStackInSlot(i)) {
+                            if (!handler.getStackInSlot(i).isEmpty() && compareItems(stack, handler.getStackInSlot(i))) {
                                 blockPosList.add(blockPos);
                                 break;
                             }
