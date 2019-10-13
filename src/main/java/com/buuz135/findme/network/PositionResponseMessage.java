@@ -5,6 +5,8 @@ import io.netty.buffer.ByteBuf;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.math.BlockPos;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.fml.network.NetworkEvent;
 
 import java.io.Serializable;
@@ -48,10 +50,15 @@ public class PositionResponseMessage implements Serializable {
                 Minecraft.getInstance().player.closeScreen();
                 for (BlockPos position : positions) {
                     for (int i = 0; i < 2; ++i)
-                        Minecraft.getInstance().particles.addEffect(new ParticlePosition(Minecraft.getInstance().player.world, position.getX() + 0.75 - Minecraft.getInstance().player.world.rand.nextDouble() / 2D, position.getY() + 0.75 - Minecraft.getInstance().player.world.rand.nextDouble() / 2D, position.getZ() + 0.75 - Minecraft.getInstance().player.world.rand.nextDouble() / 2D, 0, 0, 0));
+                        addParticle(position);
                 }
             }
         });
+    }
+
+    @OnlyIn(Dist.CLIENT)
+    public void addParticle(BlockPos position) {
+        Minecraft.getInstance().particles.addEffect(new ParticlePosition(Minecraft.getInstance().player.world, position.getX() + 0.75 - Minecraft.getInstance().player.world.rand.nextDouble() / 2D, position.getY() + 0.75 - Minecraft.getInstance().player.world.rand.nextDouble() / 2D, position.getZ() + 0.75 - Minecraft.getInstance().player.world.rand.nextDouble() / 2D, 0, 0, 0));
     }
 
 }
