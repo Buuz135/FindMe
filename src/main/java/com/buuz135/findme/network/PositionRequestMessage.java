@@ -61,7 +61,7 @@ public class PositionRequestMessage {
                 if (tileEntity != null) {
                     tileEntity.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, null).ifPresent(handler -> {
                         for (int i = 0; i < handler.getSlots(); i++) {
-                            if (!handler.getStackInSlot(i).isEmpty() && handler.getStackInSlot(i).isItemEqual(stack)) {
+                            if (!handler.getStackInSlot(i).isEmpty() && compareItems(stack, handler.getStackInSlot(i))) {
                                 blockPosList.add(blockPos);
                                 break;
                             }
@@ -71,7 +71,7 @@ public class PositionRequestMessage {
                         IInventory inventory = (IInventory) tileEntity;
                         if (inventory.isEmpty()) continue;
                         for (int i = 0; i < inventory.getSizeInventory(); i++) {
-                            if (!inventory.getStackInSlot(i).isEmpty() && inventory.getStackInSlot(i).isItemEqual(stack)) {
+                            if (!inventory.getStackInSlot(i).isEmpty() && compareItems(stack, inventory.getStackInSlot(i))) {
                                 blockPosList.add(blockPos);
                                 break;
                             }
@@ -84,6 +84,12 @@ public class PositionRequestMessage {
                 FindMe.NETWORK.sendTo(new PositionResponseMessage(blockPosList), contextSupplier.get().getSender().connection.netManager, NetworkDirection.PLAY_TO_CLIENT);
 
         });
+    }
+
+    private boolean compareItems(ItemStack first, ItemStack second) {
+        if(FindMeConfig.COMMON.IGNORE_ITEM_DAMAGE.get())
+            return first.isItemEqualIgnoreDurability(second);
+        return first.isItemEqual(second);
     }
 
 }
