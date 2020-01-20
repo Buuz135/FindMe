@@ -76,25 +76,6 @@ public class ParticlePosition extends TexturedParticle {
     public void buildGeometry(IVertexBuilder p_225606_1_, ActiveRenderInfo p_225606_2_, float p_225606_3_) {
         RenderSystem.disableDepthTest();
         super.buildGeometry(p_225606_1_, p_225606_2_, p_225606_3_);
-        //super.buildGeometry(Minecraft.getInstance().getBufferBuilders().getEffectVertexConsumers().getBuffer(RenderType.getText(new ResourceLocation("textures/particle/glitter_7.png"))), p_225606_2_, p_225606_3_);
     }
-
-    //@Override
-    //public void renderParticle(BufferBuilder buffer, ActiveRenderInfo entityIn, float partialTicks, float rotationX, float rotationZ, float rotationYZ, float rotationXY, float rotationXZ) {
-    //    super.renderParticle(buffer, entityIn, partialTicks, rotationX, rotationZ, rotationYZ, rotationXY, rotationXZ);
-    //    Minecraft.getInstance().textureManager.bindTexture(new ResourceLocation("textures/particle/glitter_7.png"));
-    //    Tessellator tessellator = Tessellator.getInstance();
-    //    tessellator.draw();
-
-    //    GlStateManager.disableDepthTest();
-    //    GlStateManager.color4f(1f, 1f, 1f, 0.5f);
-    //    buffer.begin(7, DefaultVertexFormats.PARTICLE_POSITION_TEX_COLOR_LMAP);
-    //    super.renderParticle(buffer, entityIn, partialTicks, rotationX, rotationZ, rotationYZ, rotationXY, rotationXZ);
-    //    tessellator.draw();
-
-    //    GlStateManager.enableDepthTest();
-
-    //    buffer.begin(7, DefaultVertexFormats.PARTICLE_POSITION_TEX_COLOR_LMAP);
-    //}
 
 }

@@ -54,6 +54,7 @@ public class PositionResponseMessage implements Serializable {
                 }
             }
         });
+        context.get().setPacketHandled(true);
     }
 
     @OnlyIn(Dist.CLIENT)
