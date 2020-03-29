@@ -73,9 +73,8 @@ public class ParticlePosition extends TexturedParticle {
     }
 
     @Override
-    public void buildGeometry(IVertexBuilder p_225606_1_, ActiveRenderInfo p_225606_2_, float p_225606_3_) {
+    public void renderParticle(IVertexBuilder buffer, ActiveRenderInfo renderInfo, float partialTicks) {
         RenderSystem.disableDepthTest();
-        super.buildGeometry(p_225606_1_, p_225606_2_, p_225606_3_);
+        super.renderParticle(buffer, renderInfo, partialTicks);
     }
-
 }

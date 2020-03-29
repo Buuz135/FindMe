@@ -34,7 +34,7 @@ compileJava {
 }
 
 minecraft {
-    mappings channel: 'snapshot', version: '20200111-mixed-1.15.1'
+    mappings channel: 'snapshot', version: '20200329-1.15.1'
     runs {
         client = {
             // recommended logging data for a userdev environment
@@ -59,9 +59,6 @@ repositories {
     mavenCentral()
     jcenter()
     maven {
-        url "https://maven.tterrag.com/"
-    }
-    maven {
         // location of the maven that hosts JEI files
         name = "Progwml6 maven"
         url = "https://dvs1.progwml6.com/files/maven/"
@@ -69,10 +66,10 @@ repositories {
 }
 
 dependencies {
-    minecraft 'net.minecraftforge:forge:1.15.1-30.0.36'
-    compileOnly fg.deobf("mezz.jei:jei-1.15.1:6.0.0.1:api")
+    minecraft 'net.minecraftforge:forge:1.15.2-31.1.30'
+    compileOnly fg.deobf("mezz.jei:jei-1.15.2:6.0.0.2:api")
     // at runtime, use the full JEI jar
-    runtimeOnly fg.deobf("mezz.jei:jei-1.15.1:6.0.0.1")
+    runtimeOnly fg.deobf("mezz.jei:jei-1.15.2:6.0.0.2")
 }
 
 afterEvaluate {
