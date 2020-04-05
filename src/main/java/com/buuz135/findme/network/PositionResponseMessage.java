@@ -1,6 +1,9 @@
 package com.buuz135.findme.network;
 
+import com.buuz135.findme.proxy.ClientTickHandler;
+import com.buuz135.findme.proxy.FindMeConfig;
 import com.buuz135.findme.proxy.client.ParticlePosition;
+import com.buuz135.findme.tracking.TrackingList;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.PacketBuffer;
@@ -46,6 +49,10 @@ public class PositionResponseMessage implements Serializable {
         Minecraft.getInstance().deferTask(() -> {
             if (positions.size() > 0) {
                 Minecraft.getInstance().player.closeScreen();
+                if (FindMeConfig.CLIENT.doTracking()) {
+                    TrackingList.beginTracking();
+                    ClientTickHandler.addRunnable(TrackingList::clear, FindMeConfig.CLIENT.CONTAINER_TRACK_TIME.get());
+                }
                 for (BlockPos position : positions) {
                     for (int i = 0; i < 2; ++i)
                         Minecraft.getInstance().particles.addEffect(new ParticlePosition(Minecraft.getInstance().player.world, position.getX() + 0.75 - Minecraft.getInstance().player.world.rand.nextDouble() / 2D, position.getY() + 0.75 - Minecraft.getInstance().player.world.rand.nextDouble() / 2D, position.getZ() + 0.75 - Minecraft.getInstance().player.world.rand.nextDouble() / 2D, 0, 0, 0));
