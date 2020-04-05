@@ -2,6 +2,7 @@ package com.buuz135.findme.network;
 
 import com.buuz135.findme.FindMe;
 import com.buuz135.findme.proxy.FindMeConfig;
+import com.buuz135.findme.tracking.TrackingList;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
@@ -23,6 +24,7 @@ public class PositionRequestMessage {
 
     public PositionRequestMessage(ItemStack stack) {
         this.stack = stack;
+        TrackingList.trackItem(stack);
     }
 
     public PositionRequestMessage() {
