@@ -1,14 +1,10 @@
 package com.buuz135.findme.proxy.client;
 
-import com.mojang.blaze3d.platform.GlStateManager;
-import net.minecraft.client.Minecraft;
+import com.mojang.blaze3d.systems.RenderSystem;
+import com.mojang.blaze3d.vertex.IVertexBuilder;
 import net.minecraft.client.particle.IParticleRenderType;
 import net.minecraft.client.particle.TexturedParticle;
 import net.minecraft.client.renderer.ActiveRenderInfo;
-import net.minecraft.client.renderer.BufferBuilder;
-import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
-import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
@@ -49,7 +45,7 @@ public class ParticlePosition extends TexturedParticle {
 
     @Override
     protected float getMaxU() {
-        return 1;
+        return 0.1f;
     }
 
     @Override
@@ -59,7 +55,7 @@ public class ParticlePosition extends TexturedParticle {
 
     @Override
     protected float getMaxV() {
-        return 1;
+        return 0.1f;
     }
 
     public void tick() {
@@ -77,21 +73,8 @@ public class ParticlePosition extends TexturedParticle {
     }
 
     @Override
-    public void renderParticle(BufferBuilder buffer, ActiveRenderInfo entityIn, float partialTicks, float rotationX, float rotationZ, float rotationYZ, float rotationXY, float rotationXZ) {
-        super.renderParticle(buffer, entityIn, partialTicks, rotationX, rotationZ, rotationYZ, rotationXY, rotationXZ);
-        Minecraft.getInstance().textureManager.bindTexture(new ResourceLocation("textures/particle/glitter_7.png"));
-        Tessellator tessellator = Tessellator.getInstance();
-        tessellator.draw();
-
-        GlStateManager.disableDepthTest();
-        GlStateManager.color4f(1f, 1f, 1f, 0.5f);
-        buffer.begin(7, DefaultVertexFormats.PARTICLE_POSITION_TEX_COLOR_LMAP);
-        super.renderParticle(buffer, entityIn, partialTicks, rotationX, rotationZ, rotationYZ, rotationXY, rotationXZ);
-        tessellator.draw();
-
-        GlStateManager.enableDepthTest();
-
-        buffer.begin(7, DefaultVertexFormats.PARTICLE_POSITION_TEX_COLOR_LMAP);
+    public void renderParticle(IVertexBuilder buffer, ActiveRenderInfo renderInfo, float partialTicks) {
+        RenderSystem.disableDepthTest();
+        super.renderParticle(buffer, renderInfo, partialTicks);
     }
-
 }

@@ -34,7 +34,7 @@ compileJava {
 }
 
 minecraft {
-    mappings channel: 'snapshot', version: '20190829-1.14.3'
+    mappings channel: 'snapshot', version: '20200329-1.15.1'
     runs {
         client = {
             // recommended logging data for a userdev environment
@@ -66,11 +66,10 @@ repositories {
 }
 
 dependencies {
-    minecraft 'net.minecraftforge:forge:1.14.4-28.1.44'
-    compileOnly fg.deobf("mezz.jei:jei-1.14.4:6.0.0.11:api")
+    minecraft 'net.minecraftforge:forge:1.15.2-31.1.30'
+    compileOnly fg.deobf("mezz.jei:jei-1.15.2:6.0.0.2:api")
     // at runtime, use the full JEI jar
-    runtimeOnly fg.deobf("mezz.jei:jei-1.14.4:6.0.0.11")
-
+    runtimeOnly fg.deobf("mezz.jei:jei-1.15.2:6.0.0.2")
 }
 
 afterEvaluate {
