@@ -86,6 +86,7 @@ public class PositionRequestMessage {
                 FindMe.NETWORK.sendTo(new PositionResponseMessage(blockPosList), contextSupplier.get().getSender().connection.netManager, NetworkDirection.PLAY_TO_CLIENT);
 
         });
+        contextSupplier.get().setPacketHandled(true);
     }
 
     private boolean compareItems(ItemStack first, ItemStack second) {
