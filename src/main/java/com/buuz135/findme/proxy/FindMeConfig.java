@@ -15,7 +15,7 @@ public class FindMeConfig {
     private static abstract class ConfigClass {
         public ForgeConfigSpec SPEC;
 
-        public abstract void onConfigReload (ModConfig.ConfigReloading event);
+        public abstract void onConfigReload(ModConfig.Reloading event);
     }
 
     public static class Client extends ConfigClass {
@@ -58,7 +58,7 @@ public class FindMeConfig {
             return doTracking == 1;
         }
 
-        public void onConfigReload (ModConfig.ConfigReloading event) {
+        public void onConfigReload(ModConfig.Reloading event) {
             if (event.getConfig().getType() == ModConfig.Type.CLIENT) {
                 SPEC.setConfig(event.getConfig().getConfigData());
                 currentColor = null;
@@ -82,7 +82,7 @@ public class FindMeConfig {
             BUILDER.pop();
         }
 
-        public void onConfigReload (ModConfig.ConfigReloading event) {
+        public void onConfigReload(ModConfig.Reloading event) {
             if (event.getConfig().getType() == ModConfig.Type.COMMON) {
                 SPEC.setConfig(event.getConfig().getConfigData());
             }
