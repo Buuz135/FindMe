@@ -3,6 +3,7 @@ package com.buuz135.findme.network;
 import com.buuz135.findme.proxy.client.ParticlePosition;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.world.ClientWorld;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.api.distmarker.Dist;
@@ -59,7 +60,7 @@ public class PositionResponseMessage implements Serializable {
 
     @OnlyIn(Dist.CLIENT)
     public void addParticle(BlockPos position) {
-        Minecraft.getInstance().particles.addEffect(new ParticlePosition(Minecraft.getInstance().player.world, position.getX() + 0.75 - Minecraft.getInstance().player.world.rand.nextDouble() / 2D, position.getY() + 0.75 - Minecraft.getInstance().player.world.rand.nextDouble() / 2D, position.getZ() + 0.75 - Minecraft.getInstance().player.world.rand.nextDouble() / 2D, 0, 0, 0));
+        Minecraft.getInstance().particles.addEffect(new ParticlePosition((ClientWorld) Minecraft.getInstance().player.world, position.getX() + 0.75 - Minecraft.getInstance().player.world.rand.nextDouble() / 2D, position.getY() + 0.75 - Minecraft.getInstance().player.world.rand.nextDouble() / 2D, position.getZ() + 0.75 - Minecraft.getInstance().player.world.rand.nextDouble() / 2D, 0, 0, 0));
     }
 
 }
