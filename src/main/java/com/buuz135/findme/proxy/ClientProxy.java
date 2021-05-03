@@ -47,7 +47,7 @@ public class ClientProxy extends CommonProxy {
             if (!stack.isEmpty()) {
                 FindMe.NETWORK.sendToServer(new PositionRequestMessage(stack));
             }
-            if (screen instanceof ContainerScreen) {
+            if (screen instanceof ContainerScreen && Plugin.runtime != null && Plugin.runtime.getIngredientListOverlay() != null) {
                 Object o = Plugin.runtime.getIngredientListOverlay().getIngredientUnderMouse();
                 if (o != null) {
                     if (o instanceof ItemStack) {
