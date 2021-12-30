@@ -1,103 +1,51 @@
-buildscript {
-    repositories {
-        jcenter()
-        mavenCentral()
-        maven { url = 'https://maven.minecraftforge.net' }
-        maven { url = "https://repo.spongepowered.org/maven/" }
-        maven {
-            url "https://plugins.gradle.org/m2/"
-        }
-    }
-    configurations {
-        classpath.resolutionStrategy {
-            cacheDynamicVersionsFor 10, 'seconds'
-            cacheChangingModulesFor 0, 'seconds'
-        }
-    }
-    dependencies {
-        classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '5.1.+', changing: true
-        classpath group: 'org.spongepowered', name: 'mixingradle', version: '0.7-SNAPSHOT'
-    }
-}
 plugins {
-    id 'java'
-}
-apply plugin: 'net.minecraftforge.gradle'
-apply plugin: 'eclipse'
-apply plugin: 'org.spongepowered.mixin'
-
-def BUILD_NUMBER = System.getenv("BUILD_NUMBER") ?: "0"
-version = "${minecraftVersion}-${modVersion}.$BUILD_NUMBER"
-group = "com.buuz135"
-archivesBaseName = "findme"
-
-sourceCompatibility = targetCompatibility = '1.8'
-compileJava {
-    sourceCompatibility = targetCompatibility = '1.8'
+    id "architectury-plugin" version "3.4-SNAPSHOT"
+    id "dev.architectury.loom" version "0.10.0-SNAPSHOT" apply false
 }
 
-minecraft {
-    mappings channel: 'snapshot', version: '20200916-1.16.2'
-    runs {
-        client = {
-            // recommended logging data for a userdev environment
-            properties 'forge.logging.markers': 'SCAN,REGISTRIES,REGISTRYDUMP'
-            // recommended logging level for the console
-            properties 'forge.logging.console.level': 'info'
-            workingDirectory project.file('run').canonicalPath
-            arg "-mixin.config=findme.mixins.json"
-            source sourceSets.main
-        }
-        server = {
-            // recommended logging data for a userdev environment
-            arg "-mixin.config=findme.mixins.json"
-            properties 'forge.logging.markers': 'SCAN,REGISTRIES,REGISTRYDUMP'
-            // recommended logging level for the console
-            properties 'forge.logging.console.level': 'debug'
-            workingDirectory project.file('run').canonicalPath
-            source sourceSets.main
-        }
+architectury {
+    minecraft = rootProject.minecraft_version
+}
+
+subprojects {
+    apply plugin: "dev.architectury.loom"
+
+    loom {
+        silentMojangMappingsLicense()
+    }
+
+    dependencies {
+        minecraft "com.mojang:minecraft:${rootProject.minecraft_version}"
+        // The following line declares the mojmap mappings, you may use other mappings as well
+        mappings loom.officialMojangMappings()
+        // The following line declares the yarn mappings you may select this one as well.
+        // mappings "net.fabricmc:yarn:1.17.1+build.32:v2"
     }
 }
 
-mixin {
-    add sourceSets.main, "findme.refmap.json"
-}
+allprojects {
+    apply plugin: "java"
+    apply plugin: "architectury-plugin"
+    apply plugin: "maven-publish"
 
-repositories {
-    mavenCentral()
-    jcenter()
-    maven {
-        // location of the maven that hosts JEI files
-        name = "Progwml6 maven"
-        url = "https://dvs1.progwml6.com/files/maven/"
+    archivesBaseName = rootProject.archives_base_name
+    version = rootProject.mod_version
+    group = rootProject.maven_group
+
+    repositories {
+        // Add repositories to retrieve artifacts from in here.
+        // You should only use this when depending on other mods because
+        // Loom adds the essential maven repositories to download Minecraft and libraries from automatically.
+        // See https://docs.gradle.org/current/userguide/declaring_repositories.html
+        // for more information about repositories.
     }
-}
 
-dependencies {
-    minecraft 'net.minecraftforge:forge:1.16.3-34.1.0'
-    compileOnly fg.deobf("mezz.jei:jei-1.16.3:7.5.0.42:api")
-    // at runtime, use the full JEI jar
-    runtimeOnly fg.deobf("mezz.jei:jei-1.16.3:7.5.0.42")
-}
-
-afterEvaluate {
     tasks.withType(JavaCompile) {
-        options.compilerArgs << "-Xmaxerrs" << "2000"
+        options.encoding = "UTF-8"
+        options.release = 17
     }
-}
-jar {
-    manifest {
-        attributes(["Specification-Title": project.name,
-                    "Specification-Vendor": "Buuz135",
-                    "Specification-Version": "1.0",
-                    "Implementation-Title": project.name,
-                    "Implementation-Version": "${project.modVersion}",
-                    "Implementation-Vendor" :"Buuz135",
-                    "Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ"),
-                    "ModSide": "BOTH",
-                    "MixinConfigs": "findme.mixins.json"
-        ],)
 
+    java {
+        withSourcesJar()
     }
 }
