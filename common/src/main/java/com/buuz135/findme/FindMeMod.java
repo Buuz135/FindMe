@@ -1,6 +1,7 @@
 package com.buuz135.findme;
 
 import com.buuz135.findme.client.ClientTickHandler;
+import com.buuz135.findme.client.ParticlePosition;
 import com.buuz135.findme.network.PositionRequestMessage;
 import com.buuz135.findme.network.PositionResponseMessage;
 import com.buuz135.findme.particle.CustomParticleType;
@@ -32,6 +33,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.BiPredicate;
+
+import static net.minecraft.client.particle.ParticleEngine.RENDER_ORDER;
 
 public class FindMeMod {
 
@@ -101,7 +104,10 @@ public class FindMeMod {
             e.printStackTrace();
             createConfig(file);
         }
-
+        if (!RENDER_ORDER.contains(ParticlePosition.CUSTOM)) {
+            RENDER_ORDER = new ArrayList<>(RENDER_ORDER);
+            RENDER_ORDER.add(ParticlePosition.CUSTOM);
+        }
     }
 
     private static void createConfig(File file) {
