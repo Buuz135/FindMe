@@ -52,9 +52,9 @@ public class PositionResponseMessage implements Serializable {
         Minecraft.getInstance().execute(() -> {
             if (positions.size() > 0) {
                 Minecraft.getInstance().player.closeContainer();
-                if (FindMeMod.DO_TRACKING) {
+                if (FindMeMod.CONFIG.CLIENT.CONTAINER_TRACKING) {
                     TrackingList.beginTracking();
-                    ClientTickHandler.addRunnable(TrackingList::clear, FindMeMod.TRACKING_TIME);
+                    ClientTickHandler.addRunnable(TrackingList::clear, FindMeMod.CONFIG.CLIENT.CONTAINER_TRACK_TIME);
                 }
                 for (BlockPos position : positions) {
                     for (int i = 0; i < 2; ++i)

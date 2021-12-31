@@ -4,12 +4,12 @@ import com.buuz135.findme.FindMeMod;
 import com.buuz135.findme.tracking.TrackingList;
 import dev.architectury.networking.NetworkManager;
 import io.netty.buffer.ByteBuf;
+import net.minecraft.core.BlockPos;
+import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.phys.AABB;
-import net.minecraft.core.BlockPos;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -51,9 +51,15 @@ public class PositionRequestMessage {
         packetBuffer.writeItem(stack);
     }
 
+    public static boolean compareItems(ItemStack first, ItemStack second) {
+        if (!FindMeMod.CONFIG.COMMON.IGNORE_ITEM_DAMAGE)
+            return first.sameItemStackIgnoreDurability(second);
+        return first.sameItem(second);
+    }
+
     public void handle(Supplier<NetworkManager.PacketContext> contextSupplier) {
         contextSupplier.get().queue(() -> {
-            AABB box = new AABB(contextSupplier.get().getPlayer().blockPosition()).inflate(FindMeMod.RADIUS_RANGE);
+            AABB box = new AABB(contextSupplier.get().getPlayer().blockPosition()).inflate(FindMeMod.CONFIG.COMMON.RADIUS_RANGE);
             List<BlockPos> blockPosList = new ArrayList<>();
             for (BlockPos blockPos : getBlockPosInAABB(box)) {
                 BlockEntity tileEntity = contextSupplier.get().getPlayer().level.getBlockEntity(blockPos);
@@ -66,12 +72,6 @@ public class PositionRequestMessage {
 
         });
         //contextSupplier.get().setPacketHandled(true);
-    }
-
-    public static boolean compareItems(ItemStack first, ItemStack second) {
-        if(!FindMeMod.IGNORE_COMPARING_DAMAGE)
-            return first.sameItemStackIgnoreDurability(second);
-        return first.sameItem(second);
     }
 
 }

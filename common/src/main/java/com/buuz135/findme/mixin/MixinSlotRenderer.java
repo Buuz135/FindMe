@@ -2,8 +2,8 @@ package com.buuz135.findme.mixin;
 
 import com.buuz135.findme.FindMeMod;
 import com.buuz135.findme.tracking.TrackingList;
-import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.systems.RenderSystem;
+import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.gui.GuiComponent;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.world.inventory.Slot;
@@ -19,9 +19,9 @@ public class MixinSlotRenderer {
 
     @Inject(at = @At("HEAD"), method = "Lnet/minecraft/client/gui/screens/inventory/AbstractContainerScreen;renderSlot(Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/world/inventory/Slot;)V", cancellable = true)
     private void renderSlot(PoseStack matrixStack, Slot slot, CallbackInfo info) {
-        if (FindMeMod.DO_TRACKING && slot.hasItem()) {
+        if (FindMeMod.CONFIG.CLIENT.CONTAINER_TRACKING && slot.hasItem()) {
             if (TrackingList.beingTracked(slot.getItem())) {
-                Color c = Color.decode(FindMeMod.TRACKING_COLOR);
+                Color c = FindMeMod.CONFIG.CLIENT.getColor();
                 RenderSystem.disableDepthTest();
                 GuiComponent.fill(matrixStack, slot.x, slot.y, slot.x + 16, slot.y + 16, c.getRGB());
                 RenderSystem.enableDepthTest();

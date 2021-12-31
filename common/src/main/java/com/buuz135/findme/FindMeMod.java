@@ -4,12 +4,15 @@ import com.buuz135.findme.client.ClientTickHandler;
 import com.buuz135.findme.network.PositionRequestMessage;
 import com.buuz135.findme.network.PositionResponseMessage;
 import com.buuz135.findme.particle.CustomParticleType;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.mojang.blaze3d.platform.InputConstants;
 import dev.architectury.event.EventResult;
 import dev.architectury.event.events.client.ClientRawInputEvent;
 import dev.architectury.event.events.client.ClientTickEvent;
 import dev.architectury.event.events.client.ClientTooltipEvent;
 import dev.architectury.networking.NetworkChannel;
+import dev.architectury.platform.Platform;
 import dev.architectury.registry.client.keymappings.KeyMappingRegistry;
 import dev.architectury.registry.registries.DeferredRegister;
 import dev.architectury.registry.registries.RegistrySupplier;
@@ -22,6 +25,10 @@ import net.minecraft.world.Container;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.entity.BlockEntity;
 
+import java.io.File;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.BiPredicate;
@@ -32,11 +39,7 @@ public class FindMeMod {
 
     public static NetworkChannel CHANNEL = NetworkChannel.create(new ResourceLocation(MOD_ID, "default"));
 
-    public static boolean DO_TRACKING = true;
-    public static String TRACKING_COLOR = "#cf9d15";
-    public static int RADIUS_RANGE = 12;
-    public static boolean IGNORE_COMPARING_DAMAGE = true;
-    public static int TRACKING_TIME = 30 * 20;
+    public static FindMeConfig CONFIG = new FindMeConfig();
 
     public static List<BiPredicate<BlockEntity, ItemStack>> BLOCK_CHECKERS = new ArrayList<>();
 
@@ -47,7 +50,6 @@ public class FindMeMod {
 
     public static final DeferredRegister<ParticleType<?>> PARTICLES = DeferredRegister.create(MOD_ID, Registry.PARTICLE_TYPE_REGISTRY);
     public static RegistrySupplier<ParticleType<?>> FINDME = PARTICLES.register("particle", () -> new CustomParticleType(false));
-    ;
 
     public static void init() {
         CHANNEL.register(PositionRequestMessage.class,
@@ -81,11 +83,36 @@ public class FindMeMod {
             }
         });
         ClientRawInputEvent.KEY_PRESSED.register((client, keyCode, scanCode, action, modifiers) -> {
-            if (keyCode == KEY.getDefaultKey().getValue() && !lastRenderedStack.isEmpty() && client.level.getGameTime() - lastTooltipTime < 3){
+            if (keyCode == KEY.getDefaultKey().getValue() && !lastRenderedStack.isEmpty() && client.level.getGameTime() - lastTooltipTime < 3) {
                 CHANNEL.sendToServer(new PositionRequestMessage(lastRenderedStack));
             }
             return EventResult.pass();
         });
+        File file = new File(Platform.getConfigFolder() + File.separator + MOD_ID + ".json");
+        if (!file.exists()) {
+            createConfig(file);
+        }
+        Gson gson = new GsonBuilder().setPrettyPrinting().create();
+        try {
+            FileReader reader = new FileReader(file);
+            CONFIG = gson.fromJson(reader, FindMeConfig.class);
+            reader.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+            createConfig(file);
+        }
+
+    }
+
+    private static void createConfig(File file) {
+        Gson gson = new GsonBuilder().setPrettyPrinting().create();
+        try {
+            FileWriter fileWriter = new FileWriter(file);
+            gson.toJson(CONFIG, fileWriter);
+            fileWriter.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
 }
