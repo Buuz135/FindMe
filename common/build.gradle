@@ -14,6 +14,10 @@ configurations {
     dev
 }
 
+loom{
+    accessWidenerPath.set(file("src/main/resources/findme.accesswidener"))
+}
+
 artifacts {
     dev(jar)
 }

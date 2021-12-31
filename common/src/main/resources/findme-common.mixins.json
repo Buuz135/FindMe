@@ -3,7 +3,8 @@
   "package": "com.buuz135.findme.mixin",
   "compatibilityLevel": "JAVA_17",
   "mixins": [
-    "MixinSlotRenderer"
+    "MixinSlotRenderer",
+    "ParticleEngineAccessor"
   ],
   "minVersion": "0.8"
 }

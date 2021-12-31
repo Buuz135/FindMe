@@ -16,6 +16,9 @@ loom {
         dataGen {
             mod "salem"
         }
+        accessWidenerPath.set(project(":common").file("src/main/resources/findme.accesswidener"))
+        convertAccessWideners.set(true)
+        extraAccessWideners.add("findme.accesswidener")
         mixinConfig "findme-common.mixins.json"
     }
 }

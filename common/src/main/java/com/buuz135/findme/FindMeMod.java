@@ -3,17 +3,20 @@ package com.buuz135.findme;
 import com.buuz135.findme.client.ClientTickHandler;
 import com.buuz135.findme.network.PositionRequestMessage;
 import com.buuz135.findme.network.PositionResponseMessage;
+import com.buuz135.findme.particle.CustomParticleType;
 import com.mojang.blaze3d.platform.InputConstants;
 import dev.architectury.event.EventResult;
 import dev.architectury.event.events.client.ClientRawInputEvent;
 import dev.architectury.event.events.client.ClientTickEvent;
 import dev.architectury.event.events.client.ClientTooltipEvent;
 import dev.architectury.networking.NetworkChannel;
-import dev.architectury.platform.Platform;
 import dev.architectury.registry.client.keymappings.KeyMappingRegistry;
+import dev.architectury.registry.registries.DeferredRegister;
+import dev.architectury.registry.registries.RegistrySupplier;
 import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.screens.controls.KeyBindsList;
+import net.minecraft.core.Registry;
+import net.minecraft.core.particles.ParticleType;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.Container;
 import net.minecraft.world.item.ItemStack;
@@ -42,12 +45,16 @@ public class FindMeMod {
 
     public static KeyMapping KEY = new KeyMapping("key.findme.search", InputConstants.getKey("key.keyboard.y").getValue(), "key.findme.category");
 
+    public static final DeferredRegister<ParticleType<?>> PARTICLES = DeferredRegister.create(MOD_ID, Registry.PARTICLE_TYPE_REGISTRY);
+    public static RegistrySupplier<ParticleType<?>> FINDME = PARTICLES.register("particle", () -> new CustomParticleType(false));
+    ;
+
     public static void init() {
         CHANNEL.register(PositionRequestMessage.class,
                 PositionRequestMessage::toBytes,
                 friendlyByteBuf -> new PositionRequestMessage().fromBytes(friendlyByteBuf),
                 PositionRequestMessage::handle
-                );
+        );
         CHANNEL.register(PositionResponseMessage.class,
                 PositionResponseMessage::toBytes,
                 friendlyByteBuf -> new PositionResponseMessage().fromBytes(friendlyByteBuf),
@@ -64,6 +71,7 @@ public class FindMeMod {
             }
             return false;
         });
+        PARTICLES.register();
         KeyMappingRegistry.register(KEY);
         ClientTickEvent.CLIENT_PRE.register(instance -> ClientTickHandler.clientTick());
         ClientTooltipEvent.ITEM.register((stack, lines, flag) -> {

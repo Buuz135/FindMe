@@ -5,11 +5,12 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.*;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
+import net.minecraft.client.Camera;
+import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.particle.ParticleRenderType;
 import net.minecraft.client.particle.SingleQuadParticle;
-import net.minecraft.client.Camera;
+import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.client.renderer.texture.TextureManager;
-import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 
@@ -19,6 +20,7 @@ public class ParticlePosition extends SingleQuadParticle {
     public static ParticleRenderType CUSTOM = new ParticleRenderType() {
         public void begin(BufferBuilder bufferBuilder, TextureManager textureManager) {
             RenderSystem.depthMask(true);
+            RenderSystem.setShader(GameRenderer::getParticleShader);
             RenderSystem.setShaderTexture(0, new ResourceLocation("textures/particle/glitter_4.png"));
             RenderSystem.enableBlend();
             RenderSystem.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
@@ -31,7 +33,7 @@ public class ParticlePosition extends SingleQuadParticle {
         }
 
         public String toString() {
-            return "CUSTOM";
+            return "CUSTOM2";
         }
     };
 
@@ -52,10 +54,12 @@ public class ParticlePosition extends SingleQuadParticle {
         this.hasPhysics = false;
     }
 
+    @Override
     public ParticleRenderType getRenderType() {
         return CUSTOM;
     }
 
+    @Override
     public float getQuadSize(float p_217561_1_) {
         return this.quadSize * Mth.clamp(((float) this.age + p_217561_1_) / (float) this.lifetime * 32.0F, 0.0F, 1.0F);
     }
@@ -80,6 +84,7 @@ public class ParticlePosition extends SingleQuadParticle {
         return 1f;
     }
 
+    @Override
     public void tick() {
         this.xo = this.x;
         this.yo = this.y;

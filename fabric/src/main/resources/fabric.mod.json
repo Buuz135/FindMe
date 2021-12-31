@@ -22,6 +22,10 @@
       "com.buuz135.fabric.FindMeClientFabric"
     ]
   },
+  "mixins": [
+    "findme-common.mixins.json"
+  ],
+  "accessWidener": "findme.accesswidener",
   "depends": {
     "fabricloader": ">=0.12.8",
     "fabric": "*",
