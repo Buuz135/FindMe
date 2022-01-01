@@ -18,6 +18,10 @@ loom{
     accessWidenerPath.set(file("src/main/resources/findme.accesswidener"))
 }
 
+remapJar {
+    remapAccessWidener = false
+}
+
 artifacts {
     dev(jar)
 }
