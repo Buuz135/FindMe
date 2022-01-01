@@ -104,4 +104,9 @@ public class ParticlePosition extends SingleQuadParticle {
         RenderSystem.disableDepthTest();
         super.render(buffer, renderInfo, partialTicks);
     }
+
+    @Override
+    protected int getLightColor(float f) {
+        return 15728880;
+    }
 }
