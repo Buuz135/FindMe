@@ -86,7 +86,7 @@ public class FindMeMod {
             }
         });
         ClientRawInputEvent.KEY_PRESSED.register((client, keyCode, scanCode, action, modifiers) -> {
-            if (keyCode == KEY.getDefaultKey().getValue() && !lastRenderedStack.isEmpty() && client.level.getGameTime() - lastTooltipTime < 3) {
+            if (keyCode == KEY.getDefaultKey().getValue() && !lastRenderedStack.isEmpty() && client.level != null && client.level.getGameTime() - lastTooltipTime < 3) {
                 CHANNEL.sendToServer(new PositionRequestMessage(lastRenderedStack));
             }
             return EventResult.pass();
