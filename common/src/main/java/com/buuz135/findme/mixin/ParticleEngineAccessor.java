@@ -18,7 +18,7 @@ public abstract class ParticleEngineAccessor {
     @Shadow
     protected abstract <T extends ParticleOptions> void register(ParticleType<T> particleType, ParticleProvider<T> particleProvider);
 
-    @Inject(at = @At("HEAD"), method = "Lnet/minecraft/client/particle/ParticleEngine;registerProviders()V", cancellable = true)
+    @Inject(at = @At("HEAD"), method = "Lnet/minecraft/client/particle/ParticleEngine;registerProviders()V")
     private void registerProviders(CallbackInfo ci) {
         this.register(FindMeMod.FINDME.get(), (particleOptions, clientLevel, d, e, f, g, h, i) -> new ParticlePosition(clientLevel, d, e, f, g, h, i));
     }

@@ -1,14 +1,13 @@
 package com.buuz135.forge;
 
 import com.buuz135.findme.FindMeMod;
+import com.buuz135.findme.FindMeModClient;
 import com.buuz135.findme.network.PositionRequestMessage;
 import dev.architectury.platform.forge.EventBuses;
 import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
-import net.minecraftforge.forge.event.lifecycle.GatherDataEvent;
 import net.minecraftforge.items.CapabilityItemHandler;
 
 @Mod(FindMeMod.MOD_ID)
@@ -27,7 +26,7 @@ public class FindMeModForge {
             }
             return false;
         }).orElse(false));
-        //DistExecutor.safeCallWhenOn(Dist.CLIENT, () -> SalemModClient::new);
+        DistExecutor.safeCallWhenOn(Dist.CLIENT, () -> FindMeModClient::new);
     }
 
 }
