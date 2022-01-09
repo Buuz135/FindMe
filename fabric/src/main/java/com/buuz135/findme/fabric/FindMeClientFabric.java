@@ -1,4 +1,4 @@
-package com.buuz135.fabric;
+package com.buuz135.findme.fabric;
 
 import com.buuz135.findme.FindMeModClient;
 import net.fabricmc.api.ClientModInitializer;

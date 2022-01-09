@@ -1,4 +1,4 @@
-package com.buuz135.fabric;
+package com.buuz135.findme.fabric;
 
 import com.buuz135.findme.FindMeMod;
 import com.buuz135.findme.network.PositionRequestMessage;

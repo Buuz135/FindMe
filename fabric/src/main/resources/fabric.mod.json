@@ -16,10 +16,10 @@
   "environment": "*",
   "entrypoints": {
     "main": [
-      "com.buuz135.fabric.FindMeFabric"
+      "com.buuz135.findme.fabric.FindMeFabric"
     ],
     "client": [
-      "com.buuz135.fabric.FindMeClientFabric"
+      "com.buuz135.findme.fabric.FindMeClientFabric"
     ]
   },
   "mixins": [

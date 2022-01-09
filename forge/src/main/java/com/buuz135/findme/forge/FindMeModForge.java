@@ -1,4 +1,4 @@
-package com.buuz135.forge;
+package com.buuz135.findme.forge;
 
 import com.buuz135.findme.FindMeMod;
 import com.buuz135.findme.FindMeModClient;
