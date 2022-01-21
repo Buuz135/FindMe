@@ -1,6 +1,9 @@
 name: Publish action
 
-on: [ label ]
+on:
+  push:
+    tags:
+      - '*'
 
 jobs:
   build:
@@ -45,3 +48,4 @@ jobs:
           game-versions: 1.18.1
           dependencies: |
             architectury-fabric | depends
+          changelog: "https://github.com/Buuz135/FindMe/commits/1.18"
