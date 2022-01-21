@@ -35,7 +35,9 @@ public class FindMeMod {
 
     public static List<BiPredicate<BlockEntity, ItemStack>> BLOCK_CHECKERS = new ArrayList<>();
     public static final DeferredRegister<ParticleType<?>> PARTICLES = DeferredRegister.create(FindMeMod.MOD_ID, Registry.PARTICLE_TYPE_REGISTRY);
-    public static RegistrySupplier<ParticleType<?>> FINDME = PARTICLES.register("particle", () -> new CustomParticleType(false));
+
+    public static CustomParticleType FIND_ME_PARTICLE_TYPE = new CustomParticleType(false);
+    public static RegistrySupplier<ParticleType<?>> FINDME = PARTICLES.register("particle", () -> FIND_ME_PARTICLE_TYPE);
 
     public static void init() {
         PARTICLES.register();
