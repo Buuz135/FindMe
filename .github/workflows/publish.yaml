@@ -28,12 +28,12 @@ jobs:
         with:
           curseforge-id: 291936
           curseforge-token: ${{ secrets.CURSEFORGE_TOKEN }}
-          github-token: ${{ secrets.GITHUB_TOKEN }}
           files-primary: forge/build/libs/!(*-@(dev|sources)).jar
           files-secondary: forge/build/libs/*-@(dev|sources).jar
           version-type: beta
           loaders: forge
           game-versions: 1.18.1
+          java: 17
           dependencies: |
             architectury-forge | depends
       - name: Publish Minecraft Mods Fabric
@@ -41,12 +41,12 @@ jobs:
         with:
           curseforge-id: 291936
           curseforge-token: ${{ secrets.CURSEFORGE_TOKEN }}
-          github-token: ${{ secrets.GITHUB_TOKEN }}
           files-primary: fabric/build/libs/!(*-@(dev|sources)).jar
           files-secondary: fabric/build/libs/*-@(dev|sources).jar
           version-type: beta
           loaders: fabric
           game-versions: 1.18.1
+          java: 17
           dependencies: |
             architectury-fabric | depends
           changelog: "https://github.com/Buuz135/FindMe/commits/1.18"
