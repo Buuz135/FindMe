@@ -19,6 +19,7 @@ public class ParticlePosition extends SingleQuadParticle {
 
     public static ParticleRenderType CUSTOM = new ParticleRenderType() {
         public void begin(BufferBuilder bufferBuilder, TextureManager textureManager) {
+            RenderSystem.disableDepthTest();
             RenderSystem.depthMask(true);
             RenderSystem.setShader(GameRenderer::getParticleShader);
             RenderSystem.setShaderTexture(0, new ResourceLocation("textures/particle/glitter_4.png"));
@@ -30,6 +31,9 @@ public class ParticlePosition extends SingleQuadParticle {
 
         public void end(Tesselator tesselator) {
             tesselator.end();
+            RenderSystem.disableBlend();
+            RenderSystem.depthMask(false);
+            RenderSystem.enableDepthTest();
         }
 
         public String toString() {
@@ -101,7 +105,6 @@ public class ParticlePosition extends SingleQuadParticle {
 
     @Override
     public void render(VertexConsumer buffer, Camera renderInfo, float partialTicks) {
-        RenderSystem.disableDepthTest();
         super.render(buffer, renderInfo, partialTicks);
     }
 
