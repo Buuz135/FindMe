@@ -32,7 +32,7 @@ jobs:
           files-secondary: forge/build/libs/!(*-forge).jar
           version-type: beta
           loaders: forge
-          game-versions: 1.18.1
+          game-versions: 1.18.2
           java: 17
           name: ""
           changelog: "https://github.com/Buuz135/FindMe/commits/1.18"
@@ -47,7 +47,7 @@ jobs:
           files-secondary: fabric/build/libs/!(*-fabric).jar
           version-type: beta
           loaders: fabric
-          game-versions: 1.18.1
+          game-versions: 1.18.2
           java: 17
           name: ""
           dependencies: |
