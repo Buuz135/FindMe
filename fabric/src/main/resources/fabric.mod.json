@@ -3,7 +3,7 @@
   "id": "findme",
   "version": "${version}",
   "name": "FindMe",
-  "description": "This is an example description! Tell everyone what your mod is about!",
+  "description": "FindMe allows you to search for items in nearby inventories by pressing a key.",
   "authors": [
     "Buuz135"
   ],
