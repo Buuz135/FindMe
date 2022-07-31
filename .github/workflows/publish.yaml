@@ -36,7 +36,8 @@ jobs:
           java: 17
           name: ""
           changelog: "https://github.com/Buuz135/FindMe/commits/1.19"
-          dependencies: architectury-forge | depends
+          dependencies: |
+            architectury-forge | depends | 6.0.34
       - name: Publish Minecraft Mods Fabric
         uses: Kir-Antipov/mc-publish@v2.1
         with:
@@ -49,5 +50,6 @@ jobs:
           game-versions: 1.19.1
           java: 17
           name: ""
-          dependencies: architectury-fabric | depends
+          dependencies: |
+            architectury-fabric | depends | 6.0.34
           changelog: "https://github.com/Buuz135/FindMe/commits/1.19"
