@@ -14,7 +14,7 @@ architectury {
 loom {
     forge{
         dataGen {
-            mod "salem"
+            mod "findme"
         }
         accessWidenerPath.set(project(":common").file("src/main/resources/findme.accesswidener"))
         convertAccessWideners.set(true)

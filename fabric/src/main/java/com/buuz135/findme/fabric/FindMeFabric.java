@@ -11,6 +11,8 @@ import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction;
 import net.minecraft.core.Direction;
 import net.minecraft.world.item.ItemStack;
 
+import java.util.Iterator;
+
 public class FindMeFabric implements ModInitializer {
     @Override
     public void onInitialize() {
@@ -20,7 +22,8 @@ public class FindMeFabric implements ModInitializer {
                 for (Direction value : Direction.values()) {
                     Storage<ItemVariant> storage = ItemStorage.SIDED.find(blockEntity.getLevel(), blockEntity.getBlockPos(), blockEntity.getBlockState(), blockEntity, value);
                     if (storage == null) continue;
-                    for (StorageView<ItemVariant> itemVariantStorageView : storage.iterable(transaction)) {
+                    for (Iterator<StorageView<ItemVariant>> it = storage.iterator(); it.hasNext(); ) {
+                        StorageView<ItemVariant> itemVariantStorageView = it.next();
                         ItemStack invStack = itemVariantStorageView.getResource().toStack();
                         if (!invStack.isEmpty() && PositionRequestMessage.compareItems(stack, invStack)) {
                             return true;

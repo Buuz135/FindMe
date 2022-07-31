@@ -3,7 +3,7 @@ name: Publish action
 on:
   push:
     branches:
-      - '1.18'
+      - '1.19'
 
 jobs:
   build:
@@ -32,10 +32,10 @@ jobs:
           files-secondary: forge/build/libs/!(*-forge).jar
           version-type: beta
           loaders: forge
-          game-versions: 1.18.2
+          game-versions: 1.19.1
           java: 17
           name: ""
-          changelog: "https://github.com/Buuz135/FindMe/commits/1.18"
+          changelog: "https://github.com/Buuz135/FindMe/commits/1.19"
           dependencies: |
             architectury-forge | depends
       - name: Publish Minecraft Mods Fabric
@@ -47,9 +47,9 @@ jobs:
           files-secondary: fabric/build/libs/!(*-fabric).jar
           version-type: beta
           loaders: fabric
-          game-versions: 1.18.2
+          game-versions: 1.19.1
           java: 17
           name: ""
           dependencies: |
             architectury-fabric | depends
-          changelog: "https://github.com/Buuz135/FindMe/commits/1.18"
+          changelog: "https://github.com/Buuz135/FindMe/commits/1.19"
