@@ -24,7 +24,7 @@ jobs:
       - name: build
         run: ./gradlew build
       - name: Publish Minecraft Mods Forge
-        uses: Kir-Antipov/mc-publish@v2.1
+        uses: Kir-Antipov/mc-publish@v3.1
         with:
           curseforge-id: 291936
           curseforge-token: ${{ secrets.CURSEFORGE_TOKEN }}
@@ -39,7 +39,7 @@ jobs:
           dependencies: |
             architectury-forge | depends | 6.0.34
       - name: Publish Minecraft Mods Fabric
-        uses: Kir-Antipov/mc-publish@v2.1
+        uses: Kir-Antipov/mc-publish@v3.1
         with:
           curseforge-id: 291936
           curseforge-token: ${{ secrets.CURSEFORGE_TOKEN }}
