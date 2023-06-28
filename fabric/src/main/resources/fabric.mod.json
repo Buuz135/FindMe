@@ -3,7 +3,7 @@
   "id": "findme",
   "version": "${version}",
   "name": "FindMe",
-  "description": "FindMe allows you to search for items in nearby inventories by pressing a key.\"",
+  "description": "FindMe allows you to search for items in nearby inventories by pressing a key.",
   "authors": [
     "Buuz135"
   ],
@@ -29,7 +29,7 @@
   "depends": {
     "fabricloader": ">=0.12.8",
     "fabric": "*",
-    "minecraft": ">=1.19.1",
+    "minecraft": ">=1.20.1",
     "architectury": ">=1.1.55"
   },
   "suggests": {

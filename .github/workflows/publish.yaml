@@ -1,9 +1,9 @@
 name: Publish action
 
 on:
-  push:
-    branches:
-      - '1.19'
+  create:
+    tag:
+      - '*'
 
 jobs:
   build:
@@ -32,7 +32,7 @@ jobs:
           files-secondary: forge/build/libs/!(*-forge).jar
           version-type: beta
           loaders: forge
-          game-versions: 1.19.1
+          game-versions: 1.20.1
           java: 17
           name: ""
           changelog: "https://github.com/Buuz135/FindMe/commits/1.19"
@@ -47,7 +47,7 @@ jobs:
           files-secondary: fabric/build/libs/!(*-fabric).jar
           version-type: beta
           loaders: fabric
-          game-versions: 1.19.1
+          game-versions: 1.20.1
           java: 17
           name: ""
           dependencies: |
