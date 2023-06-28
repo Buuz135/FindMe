@@ -32,7 +32,7 @@ public class PositionRequestMessage {
         for (double y = axisAlignedBB.minY; y < axisAlignedBB.maxY; ++y) {
             for (double x = axisAlignedBB.minX; x < axisAlignedBB.maxX; ++x) {
                 for (double z = axisAlignedBB.minZ; z < axisAlignedBB.maxZ; ++z) {
-                    blocks.add(new BlockPos(x, y, z));
+                    blocks.add(new BlockPos((int) x, (int) y, (int) z));
                 }
             }
         }
@@ -52,9 +52,9 @@ public class PositionRequestMessage {
     }
 
     public static boolean compareItems(ItemStack first, ItemStack second) {
-        if (!FindMeMod.CONFIG.COMMON.IGNORE_ITEM_DAMAGE)
-            return first.sameItemStackIgnoreDurability(second);
-        return first.sameItem(second);
+        if (FindMeMod.CONFIG.COMMON.IGNORE_ITEM_DAMAGE)
+            return ItemStack.isSameItem(first, second);
+        return ItemStack.isSameItemSameTags(first, second);
     }
 
     public void handle(Supplier<NetworkManager.PacketContext> contextSupplier) {
@@ -62,7 +62,7 @@ public class PositionRequestMessage {
             AABB box = new AABB(contextSupplier.get().getPlayer().blockPosition()).inflate(FindMeMod.CONFIG.COMMON.RADIUS_RANGE);
             List<BlockPos> blockPosList = new ArrayList<>();
             for (BlockPos blockPos : getBlockPosInAABB(box)) {
-                BlockEntity tileEntity = contextSupplier.get().getPlayer().level.getBlockEntity(blockPos);
+                BlockEntity tileEntity = contextSupplier.get().getPlayer().level().getBlockEntity(blockPos);
                 if (tileEntity != null && FindMeMod.BLOCK_CHECKERS.stream().anyMatch(predicate -> predicate.test(tileEntity, stack))) {
                     blockPosList.add(blockPos);
                 }
