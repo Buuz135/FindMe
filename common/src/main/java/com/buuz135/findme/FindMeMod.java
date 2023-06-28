@@ -9,8 +9,8 @@ import dev.architectury.networking.NetworkChannel;
 import dev.architectury.platform.Platform;
 import dev.architectury.registry.registries.DeferredRegister;
 import dev.architectury.registry.registries.RegistrySupplier;
-import net.minecraft.core.Registry;
 import net.minecraft.core.particles.ParticleType;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.Container;
 import net.minecraft.world.item.ItemStack;
@@ -34,7 +34,7 @@ public class FindMeMod {
     public static FindMeConfig CONFIG = new FindMeConfig();
 
     public static List<BiPredicate<BlockEntity, ItemStack>> BLOCK_CHECKERS = new ArrayList<>();
-    public static final DeferredRegister<ParticleType<?>> PARTICLES = DeferredRegister.create(FindMeMod.MOD_ID, Registry.PARTICLE_TYPE_REGISTRY);
+    public static final DeferredRegister<ParticleType<?>> PARTICLES = DeferredRegister.create(FindMeMod.MOD_ID, Registries.PARTICLE_TYPE);
 
     public static CustomParticleType FIND_ME_PARTICLE_TYPE = new CustomParticleType(false);
     public static RegistrySupplier<ParticleType<?>> FINDME = PARTICLES.register("particle", () -> FIND_ME_PARTICLE_TYPE);

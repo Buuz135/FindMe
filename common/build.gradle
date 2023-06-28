@@ -15,11 +15,11 @@ configurations {
 }
 
 loom{
-    accessWidenerPath.set(file("src/main/resources/findme.accesswidener"))
+    accessWidenerPath = file("src/main/resources/findme.accesswidener")
 }
 
 remapJar {
-    remapAccessWidener = false
+    //remapAccessWidener = false
 }
 
 artifacts {

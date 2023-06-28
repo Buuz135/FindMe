@@ -3,7 +3,11 @@ plugins {
 }
 
 configurations {
+    common
     shadowCommon // Don't use shadow from the shadow plugin because we don't want IDEA to index this.
+    compileClasspath.extendsFrom common
+    runtimeClasspath.extendsFrom common
+    developmentFabric.extendsFrom common
 }
 
 architectury {
@@ -12,7 +16,7 @@ architectury {
 }
 
 loom {
-    accessWidenerPath.set(file("../common/src/main/resources/findme.accesswidener"))
+    accessWidenerPath = project(":common").loom.accessWidenerPath
 }
 
 dependencies {

@@ -5,10 +5,10 @@ import com.buuz135.findme.FindMeModClient;
 import com.buuz135.findme.network.PositionRequestMessage;
 import dev.architectury.platform.forge.EventBuses;
 import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
-import net.minecraftforge.items.CapabilityItemHandler;
 
 @Mod(FindMeMod.MOD_ID)
 public class FindMeModForge {
@@ -18,7 +18,7 @@ public class FindMeModForge {
         EventBuses.registerModEventBus(FindMeMod.MOD_ID, FMLJavaModLoadingContext.get().getModEventBus());
         FMLJavaModLoadingContext.get().getModEventBus().register(this);
         FindMeMod.init();
-        FindMeMod.BLOCK_CHECKERS.add((blockEntity, itemStack) -> blockEntity.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, null).map(handler -> {
+        FindMeMod.BLOCK_CHECKERS.add((blockEntity, itemStack) -> blockEntity.getCapability(ForgeCapabilities.ITEM_HANDLER, null).map(handler -> {
             for (int i = 0; i < handler.getSlots(); i++) {
                 if (!handler.getStackInSlot(i).isEmpty() && PositionRequestMessage.compareItems(itemStack, handler.getStackInSlot(i))) {
                     return true;

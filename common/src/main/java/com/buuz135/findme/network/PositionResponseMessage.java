@@ -67,7 +67,7 @@ public class PositionResponseMessage implements Serializable {
 
     @Environment(EnvType.CLIENT)
     public void addParticle(BlockPos position) {
-        Minecraft.getInstance().player.level.addParticle((ParticleOptions) FindMeMod.FINDME.get(), position.getX() + 0.75 - Minecraft.getInstance().player.level.random.nextDouble() / 2D, position.getY() + 0.75 - Minecraft.getInstance().player.level.random.nextDouble() / 2D, position.getZ() + 0.75 - Minecraft.getInstance().player.level.random.nextDouble() / 2D, 0, 0, 0);
+        Minecraft.getInstance().player.level().addParticle((ParticleOptions) FindMeMod.FINDME.get(), position.getX() + 0.75 - Minecraft.getInstance().player.level().random.nextDouble() / 2D, position.getY() + 0.75 - Minecraft.getInstance().player.level().random.nextDouble() / 2D, position.getZ() + 0.75 - Minecraft.getInstance().player.level().random.nextDouble() / 2D, 0, 0, 0);
         //Minecraft.getInstance().particleEngine.add(new AshParticle((ClientLevel) Minecraft.getInstance().player.level, position.getX() + 0.75 - Minecraft.getInstance().player.level.random.nextDouble() / 2D, position.getY() + 0.75 - Minecraft.getInstance().player.level.random.nextDouble() / 2D, position.getZ() + 0.75 - Minecraft.getInstance().player.level.random.nextDouble() / 2D, 0, 0, 0));
     }
 
