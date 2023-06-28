@@ -3,7 +3,7 @@
   "id": "findme",
   "version": "${version}",
   "name": "FindMe",
-  "description": "FindMe allows you to search for items in nearby inventories by pressing a key.\"",
+  "description": "FindMe allows you to search for items in nearby inventories by pressing a key.",
   "authors": [
     "Buuz135"
   ],
