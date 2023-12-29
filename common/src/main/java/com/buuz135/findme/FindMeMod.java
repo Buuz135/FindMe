@@ -2,6 +2,7 @@ package com.buuz135.findme;
 
 import com.buuz135.findme.network.PositionRequestMessage;
 import com.buuz135.findme.network.PositionResponseMessage;
+import com.buuz135.findme.network.PullItemRequestMessage;
 import com.buuz135.findme.particle.CustomParticleType;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -34,6 +35,7 @@ public class FindMeMod {
     public static FindMeConfig CONFIG = new FindMeConfig();
 
     public static List<BiPredicate<BlockEntity, ItemStack>> BLOCK_CHECKERS = new ArrayList<>();
+    public static List<IInventoryPuller> BLOCK_EXTRACTORS = new ArrayList<>();
     public static final DeferredRegister<ParticleType<?>> PARTICLES = DeferredRegister.create(FindMeMod.MOD_ID, Registries.PARTICLE_TYPE);
 
     public static CustomParticleType FIND_ME_PARTICLE_TYPE = new CustomParticleType(false);
@@ -51,6 +53,11 @@ public class FindMeMod {
                 friendlyByteBuf -> new PositionResponseMessage().fromBytes(friendlyByteBuf),
                 PositionResponseMessage::handle
         );
+        CHANNEL.register(PullItemRequestMessage.class,
+                PullItemRequestMessage::toBytes,
+                friendlyByteBuf -> new PullItemRequestMessage().fromBytes(friendlyByteBuf),
+                PullItemRequestMessage::handle
+        );
         BLOCK_CHECKERS.add((blockEntity, itemStack) -> {
             if (blockEntity instanceof Container inventory) {
                 if (inventory.isEmpty()) return false;
@@ -62,6 +69,7 @@ public class FindMeMod {
             }
             return false;
         });
+
         File file = new File(Platform.getConfigFolder() + File.separator + MOD_ID + ".json");
         if (!file.exists()) {
             createConfig(file);
