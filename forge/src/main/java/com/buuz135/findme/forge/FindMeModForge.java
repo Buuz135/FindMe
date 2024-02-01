@@ -5,12 +5,16 @@ import com.buuz135.findme.FindMeModClient;
 import com.buuz135.findme.network.PositionRequestMessage;
 import dev.architectury.platform.forge.EventBuses;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.capabilities.ForgeCapabilities;
-import net.minecraftforge.event.level.BlockEvent;
+import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
@@ -33,7 +37,7 @@ public class FindMeModForge {
             return false;
         }).orElse(false));
         FindMeMod.BLOCK_EXTRACTORS.add((entity, stack, amount, player) -> {
-            if (!canBlockBeBroken(entity.getLevel(), entity.getBlockPos(), player)) {
+            if (!canBlockBeInteracted(entity.getLevel(), entity.getBlockPos(), player)) {
                 return 0;
             }
             return entity.getCapability(ForgeCapabilities.ITEM_HANDLER, null).map(handler -> {
@@ -54,8 +58,8 @@ public class FindMeModForge {
         DistExecutor.safeCallWhenOn(Dist.CLIENT, () -> FindMeModClient::new);
     }
 
-    public static boolean canBlockBeBroken(Level world, BlockPos pos, Player player) {
-        BlockEvent.BreakEvent event = new BlockEvent.BreakEvent(world, pos, world.getBlockState(pos), player);
+    public static boolean canBlockBeInteracted(Level world, BlockPos pos, Player player) {
+        var event = new PlayerInteractEvent.RightClickBlock(player, InteractionHand.MAIN_HAND, pos, new BlockHitResult(new Vec3(0, 0, 0), Direction.UP, pos, false));
         MinecraftForge.EVENT_BUS.post(event);
         return !event.isCanceled();
     }
