@@ -39,7 +39,7 @@ jobs:
           dependencies: |
             architectury-api | depends | *
       - name: Publish Minecraft Mods Fabric
-        uses: Kir-Antipov/mc-publish@v3.1
+        uses: Kir-Antipov/mc-publish@v3.3.0
         with:
           curseforge-id: 291936
           curseforge-token: ${{ secrets.CURSEFORGE_TOKEN }}
