@@ -2,6 +2,7 @@ package com.buuz135.findme.fabric;
 
 import com.buuz135.findme.FindMeMod;
 import com.buuz135.findme.network.PositionRequestMessage;
+import dev.architectury.event.events.common.InteractionEvent;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.transfer.v1.item.ItemStorage;
 import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
@@ -12,6 +13,7 @@ import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction;
 import net.minecraft.core.Direction;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.world.InteractionHand;
 import net.minecraft.world.item.ItemStack;
 
 import java.util.Iterator;
@@ -37,7 +39,9 @@ public class FindMeFabric implements ModInitializer {
             return false;
         });
         FindMeMod.BLOCK_EXTRACTORS.add((entity, stack, amount, player) -> {
-            //TODO CHECK IF CAN BREAK THE BLOCK
+            if (InteractionEvent.RIGHT_CLICK_BLOCK.invoker().click(player, InteractionHand.MAIN_HAND, entity.getBlockPos(), Direction.UP).isFalse()) {
+                return 0;
+            }
             try (Transaction transaction = Transaction.openOuter()) {
                 var playerInventory = PlayerInventoryStorage.of(player);
                 var totalExtracted = 0;
@@ -67,5 +71,6 @@ public class FindMeFabric implements ModInitializer {
                 return totalExtracted;
             }
         });
+
     }
 }
