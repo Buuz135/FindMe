@@ -28,8 +28,9 @@ jobs:
         with:
           curseforge-id: 291936
           curseforge-token: ${{ secrets.CURSEFORGE_TOKEN }}
-          files-primary: forge/build/libs/*-forge.jar
-          files-secondary: forge/build/libs/!(*-forge).jar
+          files: |
+            forge/build/libs/*-forge.jar
+            forge/build/libs/!(*-forge).jar
           version-type: beta
           loaders: forge
           game-versions: 1.20.1
@@ -43,8 +44,9 @@ jobs:
         with:
           curseforge-id: 291936
           curseforge-token: ${{ secrets.CURSEFORGE_TOKEN }}
-          files-primary: fabric/build/libs/*-fabric.jar
-          files-secondary: fabric/build/libs/!(*-fabric).jar
+          files: |
+            fabric/build/libs/*-fabric.jar
+            fabric/build/libs/!(*-fabric).jar
           version-type: beta
           loaders: fabric
           game-versions: 1.20.1
