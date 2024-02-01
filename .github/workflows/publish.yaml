@@ -28,6 +28,8 @@ jobs:
         with:
           curseforge-id: 291936
           curseforge-token: ${{ secrets.CURSEFORGE_TOKEN }}
+          modrinth-id: rEuzehyH
+          modrinth-token: ${{ secrets.MODRINTH_TOKEN }}
           files: |
             forge/build/libs/*-forge.jar
             forge/build/libs/!(*-forge).jar
@@ -36,7 +38,7 @@ jobs:
           game-versions: 1.20.1
           java: 17
           name: ""
-          changelog: "https://github.com/Buuz135/FindMe/commits/1.19"
+          changelog: "https://github.com/Buuz135/FindMe/commits/1.20"
           dependencies: |
             architectury-api | depends | *
       - name: Publish Minecraft Mods Fabric
@@ -44,6 +46,8 @@ jobs:
         with:
           curseforge-id: 291936
           curseforge-token: ${{ secrets.CURSEFORGE_TOKEN }}
+          modrinth-id: rEuzehyH
+          modrinth-token: ${{ secrets.MODRINTH_TOKEN }}
           files: |
             fabric/build/libs/*-fabric.jar
             fabric/build/libs/!(*-fabric).jar
@@ -54,4 +58,4 @@ jobs:
           name: ""
           dependencies: |
             architectury-api | depends | *
-          changelog: "https://github.com/Buuz135/FindMe/commits/1.19"
+          changelog: "https://github.com/Buuz135/FindMe/commits/1.20"
