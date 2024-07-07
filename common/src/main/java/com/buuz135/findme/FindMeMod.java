@@ -6,13 +6,12 @@ import com.buuz135.findme.network.PullItemRequestMessage;
 import com.buuz135.findme.particle.CustomParticleType;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import dev.architectury.networking.NetworkChannel;
+import dev.architectury.networking.NetworkManager;
 import dev.architectury.platform.Platform;
 import dev.architectury.registry.registries.DeferredRegister;
 import dev.architectury.registry.registries.RegistrySupplier;
 import net.minecraft.core.particles.ParticleType;
 import net.minecraft.core.registries.Registries;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.Container;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.entity.BlockEntity;
@@ -30,7 +29,6 @@ public class FindMeMod {
 
     public static final String MOD_ID = "findme";
 
-    public static NetworkChannel CHANNEL = NetworkChannel.create(new ResourceLocation(MOD_ID, "default"));
 
     public static FindMeConfig CONFIG = new FindMeConfig();
 
@@ -43,21 +41,9 @@ public class FindMeMod {
 
     public static void init() {
         PARTICLES.register();
-        CHANNEL.register(PositionRequestMessage.class,
-                PositionRequestMessage::toBytes,
-                friendlyByteBuf -> new PositionRequestMessage().fromBytes(friendlyByteBuf),
-                PositionRequestMessage::handle
-        );
-        CHANNEL.register(PositionResponseMessage.class,
-                PositionResponseMessage::toBytes,
-                friendlyByteBuf -> new PositionResponseMessage().fromBytes(friendlyByteBuf),
-                PositionResponseMessage::handle
-        );
-        CHANNEL.register(PullItemRequestMessage.class,
-                PullItemRequestMessage::toBytes,
-                friendlyByteBuf -> new PullItemRequestMessage().fromBytes(friendlyByteBuf),
-                PullItemRequestMessage::handle
-        );
+        NetworkManager.registerReceiver(NetworkManager.Side.C2S, PositionRequestMessage.TYPE, PositionRequestMessage.CODEC, PositionRequestMessage::handle);
+        NetworkManager.registerReceiver(NetworkManager.Side.S2C, PositionResponseMessage.TYPE, PositionResponseMessage.CODEC, PositionResponseMessage::handle);
+        NetworkManager.registerReceiver(NetworkManager.Side.C2S, PullItemRequestMessage.TYPE, PullItemRequestMessage.CODEC, PullItemRequestMessage::handle);
         BLOCK_CHECKERS.add((blockEntity, itemStack) -> {
             if (blockEntity instanceof Container inventory) {
                 if (inventory.isEmpty()) return false;

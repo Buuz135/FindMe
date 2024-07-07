@@ -1,6 +1,6 @@
 plugins {
     id "architectury-plugin" version "3.4-SNAPSHOT"
-    id "dev.architectury.loom" version "1.4.+" apply false
+    id "dev.architectury.loom" version "1.7-SNAPSHOT" apply false
 }
 
 architectury {
@@ -32,7 +32,7 @@ allprojects {
     version = rootProject.mod_version
     group = rootProject.maven_group
 
-    java.toolchain.languageVersion = JavaLanguageVersion.of(17)
+    java.toolchain.languageVersion = JavaLanguageVersion.of(21)
 
     repositories {
         // Add repositories to retrieve artifacts from in here.
@@ -40,11 +40,12 @@ allprojects {
         // Loom adds the essential maven repositories to download Minecraft and libraries from automatically.
         // See https://docs.gradle.org/current/userguide/declaring_repositories.html
         // for more information about repositories.
+        maven { url 'https://maven.neoforged.net/releases/' }
     }
 
     tasks.withType(JavaCompile) {
         options.encoding = "UTF-8"
-        options.release = 17
+        options.release = 21
     }
 
     java {

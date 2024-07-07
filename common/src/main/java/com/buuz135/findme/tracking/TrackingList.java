@@ -7,7 +7,7 @@ public class TrackingList {
     private static ItemStack toTrack = ItemStack.EMPTY;
 
     public static boolean beingTracked(ItemStack stackA) {
-        return ItemStack.isSameItemSameTags(stackA, stackB);
+        return ItemStack.isSameItemSameComponents(stackA, stackB);
     }
 
     public static void clear() {

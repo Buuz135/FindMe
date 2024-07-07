@@ -8,33 +8,31 @@ configurations {
 
 architectury {
     platformSetupLoomIde()
-    forge()
+    neoForge()
 }
 
 loom {
-    forge{
-        dataGen {
-            mod "findme"
-        }
+    neoForge {
         accessWidenerPath.set(project(":common").file("src/main/resources/findme.accesswidener"))
-        convertAccessWideners.set(true)
-        extraAccessWideners.add("findme.accesswidener")
-        mixinConfig "findme-common.mixins.json"
+        //convertAccessWideners.set(true)
+        //extraAccessWideners.add("findme.accesswidener")
+        //mixinConfig "findme-common.mixins.json"
     }
 }
 
 dependencies {
-    forge "net.minecraftforge:forge:${rootProject.minecraft_version}-${rootProject.forge_version}"
+    neoForge "net.neoforged:neoforge:${rootProject.neoforge_version}"
+    //forge "net.minecraftforge:forge:${rootProject.minecraft_version}-${rootProject.forge_version}"
     // Remove the next line if you don't want to depend on the API
-    modApi "dev.architectury:architectury-forge:${rootProject.architectury_version}"
+    modApi "dev.architectury:architectury-neoforge:${rootProject.architectury_version}"
 
     implementation(project(path: ":common", configuration: "dev")) {
         transitive = false
     }
-    developmentForge(project(path: ":common", configuration: "dev")) {
+    developmentNeoForge(project(path: ":common", configuration: "dev")) {
         transitive = false
     }
-    shadowCommon(project(path: ":common", configuration: "transformProductionForge")) {
+    shadowCommon(project(path: ":common", configuration: "transformProductionNeoForge")) {
         transitive = false
     }
 }
@@ -42,7 +40,7 @@ dependencies {
 processResources {
     inputs.property "version", project.version
 
-    filesMatching("META-INF/mods.toml") {
+    filesMatching("META-INF/neoforge.mods.toml") {
         expand "version": project.version
     }
 }
@@ -57,7 +55,7 @@ shadowJar {
 remapJar {
     inputFile.set shadowJar.archiveFile
     dependsOn shadowJar
-    archiveClassifier.set("forge")
+    archiveClassifier.set("neoforge")
 }
 
 jar {

@@ -9,6 +9,7 @@ import dev.architectury.event.EventResult;
 import dev.architectury.event.events.client.ClientRawInputEvent;
 import dev.architectury.event.events.client.ClientTickEvent;
 import dev.architectury.event.events.client.ClientTooltipEvent;
+import dev.architectury.networking.NetworkManager;
 import dev.architectury.registry.client.keymappings.KeyMappingRegistry;
 import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
@@ -35,11 +36,12 @@ public class FindMeModClient {
     }
 
     private static void init() {
+
         KeyMappingRegistry.register(KEY);
         KeyMappingRegistry.register(PULL_ONE);
         KeyMappingRegistry.register(PULL_STACK);
         ClientTickEvent.CLIENT_PRE.register(instance -> ClientTickHandler.clientTick());
-        ClientTooltipEvent.ITEM.register((stack, lines, flag) -> {
+        ClientTooltipEvent.ITEM.register((stack, lines, tooltipContext, flag) -> {
             if (!stack.isEmpty() && Minecraft.getInstance().level != null) {
                 lastRenderedStack = stack;
                 lastTooltipTime = Minecraft.getInstance().level.getGameTime();
@@ -48,11 +50,11 @@ public class FindMeModClient {
         ClientRawInputEvent.KEY_PRESSED.register((client, keyCode, scanCode, action, modifiers) -> {
             if (!lastRenderedStack.isEmpty() && client.level != null && client.level.getGameTime() - lastTooltipTime < 3) {
                 if (KEY.matches(keyCode, scanCode))
-                    FindMeMod.CHANNEL.sendToServer(new PositionRequestMessage(lastRenderedStack));
+                    NetworkManager.sendToServer(new PositionRequestMessage(lastRenderedStack));
                 if (PULL_ONE.matches(keyCode, scanCode) && action == 1)
-                    FindMeMod.CHANNEL.sendToServer(new PullItemRequestMessage(lastRenderedStack, 1));
+                    NetworkManager.sendToServer(new PullItemRequestMessage(lastRenderedStack, 1));
                 if (PULL_STACK.matches(keyCode, scanCode) && action == 1)
-                    FindMeMod.CHANNEL.sendToServer(new PullItemRequestMessage(lastRenderedStack, lastRenderedStack.getMaxStackSize()));
+                    NetworkManager.sendToServer(new PullItemRequestMessage(lastRenderedStack, lastRenderedStack.getMaxStackSize()));
             }
             return EventResult.pass();
         });

@@ -13,27 +13,23 @@ import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
+import org.jetbrains.annotations.Nullable;
 
 @Environment(EnvType.CLIENT)
 public class ParticlePosition extends SingleQuadParticle {
 
     public static ParticleRenderType CUSTOM = new ParticleRenderType() {
-        public void begin(BufferBuilder bufferBuilder, TextureManager textureManager) {
+        @Nullable
+        @Override
+        public BufferBuilder begin(Tesselator tesselator, TextureManager textureManager) {
             RenderSystem.disableDepthTest();
             RenderSystem.depthMask(true);
             RenderSystem.setShader(GameRenderer::getParticleShader);
-            RenderSystem.setShaderTexture(0, new ResourceLocation("textures/particle/glitter_4.png"));
+            RenderSystem.setShaderTexture(0, ResourceLocation.withDefaultNamespace("textures/particle/glitter_4.png"));
             RenderSystem.enableBlend();
             RenderSystem.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
             //RenderSystem.alphaFunc(516, 0.003921569F);
-            bufferBuilder.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.PARTICLE);
-        }
-
-        public void end(Tesselator tesselator) {
-            tesselator.end();
-            RenderSystem.disableBlend();
-            RenderSystem.depthMask(false);
-            RenderSystem.enableDepthTest();
+            return tesselator.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.PARTICLE);
         }
 
         public String toString() {
