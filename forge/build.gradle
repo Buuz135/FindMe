@@ -14,9 +14,6 @@ architectury {
 loom {
     neoForge {
         accessWidenerPath.set(project(":common").file("src/main/resources/findme.accesswidener"))
-        //convertAccessWideners.set(true)
-        //extraAccessWideners.add("findme.accesswidener")
-        //mixinConfig "findme-common.mixins.json"
     }
 }
 
@@ -91,5 +88,19 @@ publishing {
     // See https://docs.gradle.org/current/userguide/publishing_maven.html for information on how to set up publishing.
     repositories {
         // Add repositories to publish to here.
+    }
+}
+
+tasks {
+    processResources {
+        from(project(":common").file("src/main/resources/findme.accesswidener")) {
+            into("/assets/")
+        }
+
+    }
+
+    remapJar {
+        dependsOn(processResources)
+        atAccessWideners.add("findme.accesswidener")
     }
 }
