@@ -28,7 +28,7 @@ public class PositionRequestMessage implements CustomPacketPayload {
 
         @Override
         public void encode(RegistryFriendlyByteBuf registryFriendlyByteBuf, PositionRequestMessage positionRequestMessage) {
-            registryFriendlyByteBuf.writeNbt(positionRequestMessage.stack.save(registryFriendlyByteBuf.registryAccess()));
+            registryFriendlyByteBuf.writeNbt(positionRequestMessage.stack.saveOptional(registryFriendlyByteBuf.registryAccess()));
         }
     };
 

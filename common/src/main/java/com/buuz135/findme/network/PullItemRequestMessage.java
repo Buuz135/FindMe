@@ -28,7 +28,7 @@ public class PullItemRequestMessage implements CustomPacketPayload {
 
         @Override
         public void encode(RegistryFriendlyByteBuf registryFriendlyByteBuf, PullItemRequestMessage positionRequestMessage) {
-            registryFriendlyByteBuf.writeNbt(positionRequestMessage.stack.save(registryFriendlyByteBuf.registryAccess()));
+            registryFriendlyByteBuf.writeNbt(positionRequestMessage.stack.saveOptional(registryFriendlyByteBuf.registryAccess()));
             registryFriendlyByteBuf.writeInt(positionRequestMessage.amount);
         }
     };
