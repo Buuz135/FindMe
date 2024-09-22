@@ -49,7 +49,7 @@ public class FindMeModClient {
         });
         ClientRawInputEvent.KEY_PRESSED.register((client, keyCode, scanCode, action, modifiers) -> {
             if (!lastRenderedStack.isEmpty() && client.level != null && client.level.getGameTime() - lastTooltipTime < 3) {
-                if (KEY.matches(keyCode, scanCode))
+                if (KEY.matches(keyCode, scanCode) && action == 1)
                     NetworkManager.sendToServer(new PositionRequestMessage(lastRenderedStack));
                 if (PULL_ONE.matches(keyCode, scanCode) && action == 1)
                     NetworkManager.sendToServer(new PullItemRequestMessage(lastRenderedStack, 1));
