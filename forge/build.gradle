@@ -28,7 +28,7 @@ dependencies {
     //forge "net.minecraftforge:forge:${rootProject.minecraft_version}-${rootProject.forge_version}"
     // Remove the next line if you don't want to depend on the API
     modApi "dev.architectury:architectury-neoforge:${rootProject.architectury_version}"
-    implementation "curse.maven:functional-storage-556861:5545676"
+    //implementation "curse.maven:functional-storage-556861:5545676"
 
     implementation(project(path: ":common", configuration: "dev")) {
         transitive = false
