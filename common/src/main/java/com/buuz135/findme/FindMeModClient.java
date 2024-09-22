@@ -43,7 +43,7 @@ public class FindMeModClient {
         ClientTickEvent.CLIENT_PRE.register(instance -> ClientTickHandler.clientTick());
         ClientTooltipEvent.ITEM.register((stack, lines, tooltipContext, flag) -> {
             if (!stack.isEmpty() && Minecraft.getInstance().level != null) {
-                lastRenderedStack = stack;
+                lastRenderedStack = stack.copyWithCount(1);
                 lastTooltipTime = Minecraft.getInstance().level.getGameTime();
             }
         });
