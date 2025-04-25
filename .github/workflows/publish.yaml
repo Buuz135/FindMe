@@ -38,7 +38,7 @@ jobs:
           game-versions: 1.21
           java: 21
           name: ""
-          changelog: "https://github.com/Buuz135/FindMe/commits/1.21"
+          changelog: "https://github.com/Buuz135/FindMe/blob/1.21/CHANGELOG.md"
           dependencies: |
             architectury-api | depends | *
       - name: Publish Minecraft Mods Fabric
@@ -58,4 +58,4 @@ jobs:
           name: ""
           dependencies: |
             architectury-api | depends | *
-          changelog: "https://github.com/Buuz135/FindMe/commits/1.21"
+          changelog: "https://github.com/Buuz135/FindMe/blob/1.21/CHANGELOG.md"
