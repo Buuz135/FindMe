@@ -1,5 +1,6 @@
 package com.buuz135.findme.client;
 
+import com.buuz135.findme.FindMeMod;
 import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.*;
@@ -13,6 +14,8 @@ import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
+
+import java.awt.*;
 
 @Environment(EnvType.CLIENT)
 public class ParticlePosition extends SingleQuadParticle {
@@ -49,10 +52,11 @@ public class ParticlePosition extends SingleQuadParticle {
         this.xd += motionX;
         this.yd += motionY;
         this.zd += motionZ;
-        float color = 1.0F - (float) (Math.random() * 0.30000001192092896D);
-        this.rCol = color;
-        this.gCol = color;
-        this.bCol = color;
+        float colorOffset = (float) (Math.random() * 0.30000001192092896D);
+        Color c = FindMeMod.CONFIG.CLIENT.getParticleColor();
+        this.rCol = ((float)c.getRed()) / 255f - colorOffset;
+        this.gCol = ((float)c.getGreen()) / 255f - colorOffset;
+        this.bCol = ((float)c.getBlue()) / 255f - colorOffset;
         //this.particleScale *= 1.5F;
         this.lifetime = 20 * 5;
         this.hasPhysics = false;

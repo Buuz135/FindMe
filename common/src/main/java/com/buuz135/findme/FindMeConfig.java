@@ -14,6 +14,8 @@ public class FindMeConfig {
         public boolean CONTAINER_TRACKING = true;
         public String CONTAINER_HIGHLIGHT_COLOR = "#cf9d15";
         private transient Color currentColor = null;
+        public String PARTICLE_HIGHLIGHT_COLOR = "#ffffff";
+        private transient Color currentParticleColor = null;
 
 
         public Color getColor() {
@@ -26,6 +28,18 @@ public class FindMeConfig {
                 }
             }
             return currentColor;
+        }
+
+        public Color getParticleColor() {
+            if (currentParticleColor == null) {
+                try {
+                    currentParticleColor = Color.decode(PARTICLE_HIGHLIGHT_COLOR.toLowerCase());
+                } catch (NumberFormatException e) {
+                    //FindMe.LOG.error("Unable to parse color value '" + PARTICLE_HIGHLIGHT_COLOR.get() + "'", e);
+                    currentParticleColor = Color.decode("#ffffff");
+                }
+            }
+            return currentParticleColor;
         }
 
 
