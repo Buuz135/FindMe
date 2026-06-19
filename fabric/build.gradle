@@ -1,5 +1,5 @@
 plugins {
-    id "com.github.johnrengelman.shadow" version "7.1.0"
+    id "com.gradleup.shadow"
 }
 
 configurations {
@@ -15,15 +15,11 @@ architectury {
     fabric()
 }
 
-loom {
-    accessWidenerPath = project(":common").loom.accessWidenerPath
-}
-
 dependencies {
-    modImplementation "net.fabricmc:fabric-loader:${rootProject.fabric_loader_version}"
-    modApi "net.fabricmc.fabric-api:fabric-api:${rootProject.fabric_api_version}"
+    api "net.fabricmc:fabric-loader:${rootProject.fabric_loader_version}"
+    api "net.fabricmc.fabric-api:fabric-api:${rootProject.fabric_api_version}"
     // Remove the next line if you don't want to depend on the API
-    modApi "dev.architectury:architectury-fabric:${rootProject.architectury_version}"
+    api "dev.architectury:architectury-fabric:${rootProject.architectury_version}"
 
     implementation(project(path: ":common", configuration: "dev")) {
         transitive = false
@@ -49,15 +45,15 @@ shadowJar {
     archiveClassifier.set("dev-shadow")
 }
 
-remapJar {
-    inputFile.set shadowJar.archiveFile
-    dependsOn shadowJar
-    archiveClassifier.set("fabric")
-}
-
 jar {
     archiveClassifier.set("dev")
 }
+
+shadowJar {
+    archiveClassifier.set("fabric")
+}
+
+assemble.dependsOn shadowJar
 
 sourcesJar {
     def commonSources = project(":common").sourcesJar
@@ -76,12 +72,10 @@ publishing {
         mavenFabric(MavenPublication) {
             artifactId = rootProject.archives_base_name + "-" + project.name
             // add all the jars that should be included when publishing to maven
-            artifact(remapJar) {
+            artifact(shadowJar) {
                 classifier null
             }
-            artifact(sourcesJar) {
-                builtBy remapSourcesJar
-            }
+            artifact sourcesJar
         }
     }
 

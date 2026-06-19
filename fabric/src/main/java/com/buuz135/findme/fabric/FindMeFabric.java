@@ -14,6 +14,7 @@ import net.minecraft.core.Direction;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
 import net.minecraft.world.item.ItemStack;
 
 import java.util.Iterator;
@@ -39,7 +40,7 @@ public class FindMeFabric implements ModInitializer {
             return false;
         });
         FindMeMod.BLOCK_EXTRACTORS.add((entity, stack, amount, player) -> {
-            if (InteractionEvent.RIGHT_CLICK_BLOCK.invoker().click(player, InteractionHand.MAIN_HAND, entity.getBlockPos(), Direction.UP).isFalse()) {
+            if (InteractionEvent.RIGHT_CLICK_BLOCK.invoker().click(player, InteractionHand.MAIN_HAND, entity.getBlockPos(), Direction.UP) == InteractionResult.FAIL) {
                 return 0;
             }
             try (Transaction transaction = Transaction.openOuter()) {
@@ -57,7 +58,7 @@ public class FindMeFabric implements ModInitializer {
                             totalExtracted += extracted;
                             var level = player.level();
                             level.playSound(null, player.getX(), player.getY() + 0.5, player.getZ(),
-                                    SoundEvents.ITEM_PICKUP, SoundSource.PLAYERS, 0.5F, ((level.random.nextFloat() - level.random.nextFloat()) * 0.7F + 1.0F) * 2.0F);
+                                    SoundEvents.ITEM_PICKUP, SoundSource.PLAYERS, 0.5F, ((level.getRandom().nextFloat() - level.getRandom().nextFloat()) * 0.7F + 1.0F) * 2.0F);
                         }
                         if (totalExtracted >= amount) {
                             break;

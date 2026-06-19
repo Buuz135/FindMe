@@ -2,26 +2,22 @@ package com.buuz135.findme.network;
 
 
 import com.buuz135.findme.FindMeMod;
-import com.buuz135.findme.client.ClientTickHandler;
-import com.buuz135.findme.client.ParticlePosition;
-import com.buuz135.findme.tracking.TrackingList;
+import com.buuz135.findme.FindMeModClient;
 import dev.architectury.networking.NetworkManager;
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
-import net.minecraft.client.Minecraft;
+import dev.architectury.platform.Platform;
+import dev.architectury.utils.Env;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.sounds.SoundEvents;
+import net.minecraft.resources.Identifier;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class PositionResponseMessage implements CustomPacketPayload {
 
-    public static CustomPacketPayload.Type<PositionResponseMessage> TYPE = new CustomPacketPayload.Type<>(ResourceLocation.fromNamespaceAndPath(FindMeMod.MOD_ID, "position_response"));
+    public static CustomPacketPayload.Type<PositionResponseMessage> TYPE = new CustomPacketPayload.Type<>(Identifier.fromNamespaceAndPath(FindMeMod.MOD_ID, "position_response"));
     public static StreamCodec<? super RegistryFriendlyByteBuf, PositionResponseMessage> CODEC = new StreamCodec<>() {
         @Override
         public PositionResponseMessage decode(RegistryFriendlyByteBuf object) {
@@ -54,27 +50,11 @@ public class PositionResponseMessage implements CustomPacketPayload {
 
 
     public void handle(NetworkManager.PacketContext context) {
-        Minecraft.getInstance().execute(() -> {
-            if (positions.size() > 0) {
-                Minecraft.getInstance().player.closeContainer();
-                Minecraft.getInstance().player.playSound(SoundEvents.EXPERIENCE_ORB_PICKUP, 1.0F, 1.0F);
-                if (FindMeMod.CONFIG.CLIENT.CONTAINER_TRACKING) {
-                    TrackingList.beginTracking();
-                    ClientTickHandler.addRunnable(TrackingList::clear, FindMeMod.CONFIG.CLIENT.CONTAINER_TRACK_TIME);
-                }
-                for (BlockPos position : positions) {
-                    for (int i = 0; i < 2; ++i)
-                        addParticle(position);
-                }
-            }
-        });
-        //context.get().setPacketHandled(true);
-    }
-
-    @Environment(EnvType.CLIENT)
-    public void addParticle(BlockPos position) {
-        Minecraft.getInstance().particleEngine.add(new ParticlePosition(Minecraft.getInstance().level, position.getX() + 0.75 - Minecraft.getInstance().player.level().random.nextDouble() / 2D, position.getY() + 0.75 - Minecraft.getInstance().player.level().random.nextDouble() / 2D, position.getZ() + 0.75 - Minecraft.getInstance().player.level().random.nextDouble() / 2D, 0, 0, 0));
-        //Minecraft.getInstance().particleEngine.add(new AshParticle((ClientLevel) Minecraft.getInstance().player.level(), position.getX() + 0.75 - Minecraft.getInstance().player.level().random.nextDouble() / 2D, 1 + position.getY() + 0.75 - Minecraft.getInstance().player.level().random.nextDouble() / 2D, position.getZ() + 0.75 - Minecraft.getInstance().player.level().random.nextDouble() / 2D, 0, 0, 0));
+        if (context.getEnvironment() != Env.CLIENT || Platform.getEnvironment() != Env.CLIENT) {
+            return;
+        }
+        List<BlockPos> responsePositions = List.copyOf(positions);
+        context.queue(() -> FindMeModClient.handlePositionResponse(responsePositions));
     }
 
     @Override

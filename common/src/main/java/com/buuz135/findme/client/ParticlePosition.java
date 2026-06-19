@@ -1,47 +1,17 @@
 package com.buuz135.findme.client;
 
 import com.buuz135.findme.FindMeMod;
-import com.mojang.blaze3d.platform.GlStateManager;
-import com.mojang.blaze3d.systems.RenderSystem;
-import com.mojang.blaze3d.vertex.*;
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
-import net.minecraft.client.Camera;
 import net.minecraft.client.multiplayer.ClientLevel;
-import net.minecraft.client.particle.ParticleRenderType;
 import net.minecraft.client.particle.SingleQuadParticle;
-import net.minecraft.client.renderer.GameRenderer;
-import net.minecraft.client.renderer.texture.TextureManager;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.util.Mth;
-import org.jetbrains.annotations.Nullable;
 
 import java.awt.*;
 
-@Environment(EnvType.CLIENT)
 public class ParticlePosition extends SingleQuadParticle {
 
-    public static ParticleRenderType CUSTOM = new ParticleRenderType() {
-        @Nullable
-        @Override
-        public BufferBuilder begin(Tesselator tesselator, TextureManager textureManager) {
-            RenderSystem.disableDepthTest();
-            RenderSystem.depthMask(true);
-            RenderSystem.setShader(GameRenderer::getParticleShader);
-            RenderSystem.setShaderTexture(0, ResourceLocation.withDefaultNamespace("textures/particle/glitter_4.png"));
-            RenderSystem.enableBlend();
-            RenderSystem.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
-            //RenderSystem.alphaFunc(516, 0.003921569F);
-            return tesselator.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.PARTICLE);
-        }
-
-        public String toString() {
-            return "CUSTOM2";
-        }
-    };
-
-    public ParticlePosition(ClientLevel world, double x, double y, double z, double motionX, double motionY, double motionZ) {
-        super(world, x, y, z, 0.0D, 0.0D, 0.0D);
+    public ParticlePosition(ClientLevel world, double x, double y, double z, double motionX, double motionY, double motionZ, TextureAtlasSprite sprite) {
+        super(world, x, y, z, 0.0D, 0.0D, 0.0D, sprite);
         this.xd *= 0.10000000149011612D;
         this.yd *= 0.10000000149011612D;
         this.zd *= 0.10000000149011612D;
@@ -59,8 +29,8 @@ public class ParticlePosition extends SingleQuadParticle {
     }
 
     @Override
-    public ParticleRenderType getRenderType() {
-        return CUSTOM;
+    protected Layer getLayer() {
+        return Layer.TRANSLUCENT;
     }
 
     @Override
@@ -99,17 +69,7 @@ public class ParticlePosition extends SingleQuadParticle {
     }
 
     @Override
-    public void setAlpha(float alpha) {
-        super.setAlpha(alpha);
-    }
-
-    @Override
-    public void render(VertexConsumer buffer, Camera renderInfo, float partialTicks) {
-        super.render(buffer, renderInfo, partialTicks);
-    }
-
-    @Override
-    protected int getLightColor(float f) {
+    protected int getLightCoords(float f) {
         return 15728880;
     }
 }

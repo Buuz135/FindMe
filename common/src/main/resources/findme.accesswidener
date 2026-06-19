@@ -1,5 +1,0 @@
-accessWidener	v1	named
-
-accessible method net/minecraft/client/particle/ParticleEngine register (Lnet/minecraft/core/particles/ParticleType;Lnet/minecraft/client/particle/ParticleProvider;)V
-mutable field net/minecraft/client/particle/ParticleEngine RENDER_ORDER Ljava/util/List;
-accessible field net/minecraft/client/particle/ParticleEngine RENDER_ORDER Ljava/util/List;

@@ -8,11 +8,11 @@
     "Buuz135"
   ],
   "contact": {
-    "homepage": "https://fabricmc.net/",
-    "sources": "https://github.com/FabricMC/fabric-example-mod"
+    "homepage": "https://github.com/Buuz135/FindMe",
+    "sources": "https://github.com/Buuz135/FindMe",
+    "issues": "https://github.com/Buuz135/FindMe/issues"
   },
   "license": "MIT",
-  "icon": "assets/examplemod/icon.png",
   "environment": "*",
   "entrypoints": {
     "main": [
@@ -25,12 +25,12 @@
   "mixins": [
     "findme-common.mixins.json"
   ],
-  "accessWidener": "findme.accesswidener",
   "depends": {
-    "fabricloader": ">=0.12.8",
-    "fabric": "*",
-    "minecraft": ">=1.20.1",
-    "architectury": ">=1.1.55"
+    "fabricloader": ">=0.19.2",
+    "fabric-api": ">=0.150.0",
+    "minecraft": "26.1.2",
+    "java": ">=25",
+    "architectury": ">=20.0.7"
   },
   "suggests": {
     "flamingo": "*"

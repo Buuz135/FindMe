@@ -43,7 +43,7 @@ public class FindMeMod {
     public static final DeferredRegister<ParticleType<?>> PARTICLES = DeferredRegister.create(FindMeMod.MOD_ID, Registries.PARTICLE_TYPE);
 
     public static CustomParticleType FIND_ME_PARTICLE_TYPE = new CustomParticleType(false);
-    public static RegistrySupplier<ParticleType<?>> FINDME = PARTICLES.register("particle", () -> FIND_ME_PARTICLE_TYPE);
+    public static RegistrySupplier<CustomParticleType> FINDME = PARTICLES.register("particle", () -> FIND_ME_PARTICLE_TYPE);
 
     public static void init() {
         PARTICLES.register();

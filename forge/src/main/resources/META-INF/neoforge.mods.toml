@@ -16,21 +16,21 @@ FindMe allows you to search for items in nearby inventories by pressing a key."
 config = "findme-common.mixins.json"
 [[dependencies.findme]]
 modId = "neoforge"
-mandatory = true
-versionRange = "[1,)"
+type = "required"
+versionRange = "[26.1.2.76,)"
 ordering = "NONE"
 side = "BOTH"
 
 [[dependencies.findme]]
 modId = "minecraft"
-mandatory = true
-versionRange = "[1.19.1,)"
+type = "required"
+versionRange = "[26.1.2]"
 ordering = "NONE"
 side = "BOTH"
 
 [[dependencies.findme]]
 modId = "architectury"
-mandatory = true
-versionRange = "[2.3.23,)"
+type = "required"
+versionRange = "[20.0.7,)"
 ordering = "AFTER"
 side = "BOTH"

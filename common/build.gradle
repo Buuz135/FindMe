@@ -1,25 +1,19 @@
 dependencies {
     // We depend on fabric loader here to use the fabric @Environment annotations and get the mixin dependencies
     // Do NOT use other classes from fabric loader
-    modImplementation "net.fabricmc:fabric-loader:${rootProject.fabric_loader_version}"
+    implementation "net.fabricmc:fabric-loader:${rootProject.fabric_loader_version}"
     // Remove the next line if you don't want to depend on the API
-    modApi "dev.architectury:architectury:${rootProject.architectury_version}"
+    api "dev.architectury:architectury:${rootProject.architectury_version}"
 }
 
 architectury {
-    common(project.enabled_platforms.split(","))
+    common(project.enabled_platforms.split(",")) {
+        it.platformPackage("neoforge", "forge")
+    }
 }
 
 configurations {
     dev
-}
-
-loom{
-    accessWidenerPath = file("src/main/resources/findme.accesswidener")
-}
-
-remapJar {
-    //remapAccessWidener = false
 }
 
 artifacts {
@@ -31,10 +25,8 @@ publishing {
         mavenCommon(MavenPublication) {
             artifactId = rootProject.archives_base_name
             // add all the jars that should be included when publishing to maven
-            artifact remapJar
-            artifact(sourcesJar) {
-                builtBy remapSourcesJar
-            }
+            artifact jar
+            artifact sourcesJar
         }
     }
 
