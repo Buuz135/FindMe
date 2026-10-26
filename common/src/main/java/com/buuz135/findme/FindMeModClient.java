@@ -13,6 +13,7 @@ import dev.architectury.networking.NetworkManager;
 import dev.architectury.registry.client.keymappings.KeyMappingRegistry;
 import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 
 import java.util.ArrayList;
@@ -55,6 +56,20 @@ public class FindMeModClient {
                     NetworkManager.sendToServer(new PullItemRequestMessage(lastRenderedStack, 1));
                 if (PULL_STACK.matches(keyCode, scanCode) && action == 1)
                     NetworkManager.sendToServer(new PullItemRequestMessage(lastRenderedStack, lastRenderedStack.getMaxStackSize()));
+            }
+            else if(client.level != null ){
+
+                Player player = Minecraft.getInstance().player;
+
+                assert player != null;
+                ItemStack item = player.getMainHandItem().copyWithCount(1);
+
+                if (KEY.matches(keyCode, scanCode) && action == 1)
+                    NetworkManager.sendToServer(new PositionRequestMessage(item));
+                if (PULL_ONE.matches(keyCode, scanCode) && action == 1)
+                    NetworkManager.sendToServer(new PullItemRequestMessage(item, 1));
+                if (PULL_STACK.matches(keyCode, scanCode) && action == 1)
+                    NetworkManager.sendToServer(new PullItemRequestMessage(item, item.getMaxStackSize()));
             }
             return EventResult.pass();
         });
