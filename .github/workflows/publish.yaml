@@ -36,7 +36,7 @@ jobs:
           version-type: beta
           loaders: neoforge
           environment: client | server
-          game-versions: 1.21
+          game-versions: 1.21.1
           java: 21
           name: ""
           changelog: "https://github.com/Buuz135/FindMe/blob/1.21/CHANGELOG.md"
@@ -55,7 +55,7 @@ jobs:
           version-type: beta
           loaders: fabric
           environment: client | server
-          game-versions: 1.21
+          game-versions: 1.21.1
           java: 21
           name: ""
           dependencies: |
